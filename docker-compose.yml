@@ -1,5 +1,22 @@
 version: '3'
 services:
+  # go_db:
+  #   image: mysql:5.7
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_USER: root
+  #     MYSQL_ROOT_PASSWORD: passw0rd
+  #     MYSQL_DATABASE: techtrain
+
+  go_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+
   swagger:
     image: swaggerapi/swagger-ui
     volumes:
