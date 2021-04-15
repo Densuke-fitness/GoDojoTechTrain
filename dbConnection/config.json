@@ -1,0 +1,9 @@
+{
+    "DBDRIVER":"mysql",
+    "DBHOST": "go_db",
+	"DBPORT": "3306",
+	"DBUSERNAME": "root",
+    "DBPASSWORD": "passw0rd",
+	"DBNAME": "techtraindb"
+    
+}
