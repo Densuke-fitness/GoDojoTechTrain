@@ -22,9 +22,11 @@ services:
     ports:
       - "8080:8080"
     restart: always
+    depends_on:
+      - go_db
 
   swagger:
-    container_name: wagger
+    container_name: swagger
     image: swaggerapi/swagger-ui
     volumes:
       - ./api-specification-document/openapi.yml:/usr/share/nginx/html/openapi.yml
@@ -32,8 +34,19 @@ services:
       API_URL: openapi.yml
     ports:
       - "10000:8080"
+  
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    environment: 
+      - DOZZLE_TAILSIZE=100
+      - DOZZLE_FILTER=status=running
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9999:8080"
 
 
 volumes:
-  db-volume:
+    db-volume:
           
