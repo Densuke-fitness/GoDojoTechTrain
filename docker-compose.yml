@@ -48,5 +48,5 @@ services:
 
 
 volumes:
-    db-volume:
+  db-volume:
           

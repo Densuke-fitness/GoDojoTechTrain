@@ -6,10 +6,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// Tokenを生成する
-// nameを渡せば返ってくる
+//Pass a unique id and return a token
 func CreateToken(id int) (string, error) {
-	token := jwt.New(jwt.GetSigningMethod("HS256"))
+	token := jwt.New(jwt.SigningMethodHS256)
 
 	token.Claims = jwt.MapClaims{
 		"id":  id,
