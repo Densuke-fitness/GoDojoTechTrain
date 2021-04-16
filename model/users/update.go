@@ -16,7 +16,7 @@ func UpdateUser(resp http.ResponseWriter, req *http.Request) {
 	err := json.NewDecoder(req.Body).Decode(&request)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		_, _ = resp.Write([]byte(`"error™: "Error unmarshalling the request"`))
+		resp.Write([]byte(`"error™: "Error unmarshalling the request"`)) //nolint
 	}
 
 	//fetch token and extract userid
@@ -24,7 +24,7 @@ func UpdateUser(resp http.ResponseWriter, req *http.Request) {
 	decodedtoken, err := auth.DecodeToken(token)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		_, _ = resp.Write([]byte(`"error": "Error decoding token"`))
+		resp.Write([]byte(`"error": "Error decoding token"`)) //nolint
 	}
 
 	// extract userid
@@ -34,7 +34,7 @@ func UpdateUser(resp http.ResponseWriter, req *http.Request) {
 	_, err = UpdateNameById(request.Name, id)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		_, _ = resp.Write([]byte(`"error": "Error updating name"`))
+		resp.Write([]byte(`"error": "Error updating name"`)) //nolint
 	}
 
 	resp.WriteHeader(http.StatusOK)
