@@ -43,9 +43,9 @@ Insert the token obtained by CreateUser into the x-auth-token in the http header
 
 ```
 curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://localhost:8080/user/update 
-
-
 ```
+
+[![Image from Gyazo](https://i.gyazo.com/7b337faf2602fc828cbac398ff666fdf.png)](https://gyazo.com/7b337faf2602fc828cbac398ff666fdf)
 
 ### Reference
 - [オンライン版　CA Tech Dojo サーバサイド (Go)編](https://techbowl.co.jp/techtrain/missions/12)
