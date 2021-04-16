@@ -15,7 +15,8 @@ func GetUser(resp http.ResponseWriter, req *http.Request) {
 	decodedtoken, err := auth.DecodeToken(token)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error decoding token"`))
+		//TODO: The return value is listed because it was flagged as an error by golangci-lint, but I expect there is a better way.
+		_, _ = resp.Write([]byte(`"error": "Error decoding token"`))
 	}
 
 	// extract userid
@@ -25,7 +26,7 @@ func GetUser(resp http.ResponseWriter, req *http.Request) {
 	name, err := SelectNameById(id)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error scanning name"`))
+		_, _ = resp.Write([]byte(`"error": "Error scanning name"`))
 	}
 
 	response := struct {
@@ -35,8 +36,8 @@ func GetUser(resp http.ResponseWriter, req *http.Request) {
 	result, err := json.Marshal(&response)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error marshalling data"`))
+		_, _ = resp.Write([]byte(`"error": "Error marshalling data"`))
 	}
 	resp.WriteHeader(http.StatusOK)
-	resp.Write(result)
+	_, _ = resp.Write(result)
 }

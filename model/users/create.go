@@ -17,21 +17,22 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	err := json.NewDecoder(req.Body).Decode(&request)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error unmarshalling the request"`))
+		//TODO: The return value is listed because it was flagged as an error by golangci-lint, but I expect there is a better way.
+		_, _ = resp.Write([]byte(`"error": "Error unmarshalling the request"`))
 	}
 
 	//database prosess
 	id, err := Insert(request.Name)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error inserting the name"`))
+		_, _ = resp.Write([]byte(`"error": "Error inserting the name"`))
 	}
 
 	//jwt prosess
 	token, err := auth.CreateToken(int(id))
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error creating the token"`))
+		_, _ = resp.Write([]byte(`"error": "Error creating the token"`))
 	}
 
 	//Structure to be stored when sending a response to a user
@@ -41,9 +42,9 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	result, err := json.Marshal(&response)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`"error: "Error marshalling data"`))
+		_, _ = resp.Write([]byte(`"error": "Error marshalling data"`))
 	}
 
 	resp.WriteHeader(http.StatusOK)
-	resp.Write(result)
+	_, _ = resp.Write(result)
 }
