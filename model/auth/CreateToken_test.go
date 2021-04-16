@@ -9,8 +9,7 @@ func TestCreateToken(t *testing.T) {
 
 	//a id
 	tests := []struct {
-		id   int
-		want string
+		id int
 	}{
 		{id: 1},
 		{id: 2},
