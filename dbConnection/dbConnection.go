@@ -2,46 +2,42 @@ package dbConnection
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
-	"os"
-
+	"github.com/kelseyhightower/envconfig"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type config struct {
-	DBDriver   string `json:"DBDRIVER"`
-	DBHost     string `json:"DBHOST"`
-	DBPort     string `json:"DBPORT"`
-	DBUserName string `json:"DBUSERNAME"`
-	DBPassword string `json:"DBPASSWORD"`
-	DBName     string `json:"DBNAME"`
+	DbDriver   string 
+	DbHost     string 
+	DbPort     string 
+	DbUserName string 
+	DbPassword string 
+	DbName     string 
 }
 
 func (cfg *config) dbSrc() string {
 	return fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?parseTime=true",
-		cfg.DBUserName,
-		cfg.DBPassword,
-		cfg.DBHost,
-		cfg.DBPort,
-		cfg.DBName)
+		cfg.DbUserName,
+		cfg.DbPassword,
+		cfg.DbHost,
+		cfg.DbPort,
+		cfg.DbName)
 }
 
 func loadConfig() (*config, error) {
-	f, err := os.Open("./dbConnection/config.json")
-	if err != nil {
-		log.Fatal("loadConfig os.Open err:", err)
-		return nil, err
-	}
-
-	defer f.Close()
 
 	var cfg config
+	//Call the environment variables written in docker-compose.yaml
+	err := envconfig.Process("",&cfg)
+    if err != nil {
+        log.Fatal(err.Error())
+		return nil, err
+    }
 
-	err = json.NewDecoder(f).Decode(&cfg)
-	return &cfg, err
+	return &cfg ,nil
 }
 
 type DbConnection struct {
@@ -58,9 +54,8 @@ func newDbConnection() *DbConnection {
 		return nil
 	}
 
-	pool, err := sql.Open(cfg.DBDriver, cfg.dbSrc())
+	pool, err := sql.Open(cfg.DbDriver, cfg.dbSrc())
 	if err != nil {
-		//TODO
 		log.Fatalf("Error when executing sql.Open: %s", err)
 		return nil
 	}
