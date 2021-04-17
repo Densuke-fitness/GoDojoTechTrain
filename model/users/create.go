@@ -25,6 +25,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error inserting the name"`)) //nolint
+		return
 	}
 
 	//jwt prosess
@@ -32,6 +33,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error creating the token"`)) //nolint
+		return
 	}
 
 	//Structure to be stored when sending a response to a user
@@ -42,8 +44,10 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error marshalling data"`)) //nolint
+		return
 	}
 
 	resp.WriteHeader(http.StatusOK)
 	resp.Write(result) //nolint
+	return
 }

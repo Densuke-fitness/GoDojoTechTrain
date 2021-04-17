@@ -8,6 +8,7 @@ RUN go build -o bin/api .
 
 FROM alpine:3.11
 COPY --from=builder /app/bin/api /app/api
+COPY ./dbConnection /app/dbConnection
 EXPOSE 8080
 
 WORKDIR /app/

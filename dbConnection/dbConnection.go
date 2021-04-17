@@ -4,17 +4,18 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"github.com/kelseyhightower/envconfig"
+
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kelseyhightower/envconfig"
 )
 
 type config struct {
-	DbDriver   string 
-	DbHost     string 
-	DbPort     string 
-	DbUserName string 
-	DbPassword string 
-	DbName     string 
+	DbDriver   string
+	DbHost     string
+	DbPort     string
+	DbUserName string
+	DbPassword string
+	DbName     string
 }
 
 func (cfg *config) dbSrc() string {
@@ -31,13 +32,14 @@ func loadConfig() (*config, error) {
 
 	var cfg config
 	//Call the environment variables written in docker-compose.yaml
-	err := envconfig.Process("",&cfg)
-    if err != nil {
-        log.Fatal(err.Error())
+	err := envconfig.Process("", &cfg)
+	if err != nil {
+		log.Fatal(err.Error())
 		return nil, err
-    }
+	}
+	fmt.Println(cfg)
 
-	return &cfg ,nil
+	return &cfg, nil
 }
 
 type DbConnection struct {
@@ -55,6 +57,7 @@ func newDbConnection() *DbConnection {
 	}
 
 	pool, err := sql.Open(cfg.DbDriver, cfg.dbSrc())
+	fmt.Println(pool)
 	if err != nil {
 		log.Fatalf("Error when executing sql.Open: %s", err)
 		return nil
