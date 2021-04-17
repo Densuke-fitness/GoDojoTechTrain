@@ -18,6 +18,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error unmarshalling the request"`)) //nolint
+		return
 	}
 
 	//database prosess
@@ -49,5 +50,4 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 
 	resp.WriteHeader(http.StatusOK)
 	resp.Write(result) //nolint
-	return
 }
