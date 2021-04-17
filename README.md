@@ -47,6 +47,11 @@ curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://loc
 
 [![Image from Gyazo](https://i.gyazo.com/7b337faf2602fc828cbac398ff666fdf.png)](https://gyazo.com/7b337faf2602fc828cbac398ff666fdf)
 
+### Appendix
+
+**ERD**
+- [TechTrainERD.drawio](https://drive.google.com/file/d/1eJ9z5BW58hKN4MKJkjldIqqWgjXTSEEe/view?usp=sharing)
+
 ### Reference
 - [オンライン版　CA Tech Dojo サーバサイド (Go)編](https://techbowl.co.jp/techtrain/missions/12)
 - [DeNA Codelabs: テスタビリティの高いGoのAPIサーバを開発しよう（その1 ~準備&E2E実装編~）](https://dena.github.io/codelabs/testable-architecture-with-go-part1/#0)
