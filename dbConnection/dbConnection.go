@@ -34,7 +34,7 @@ func loadConfig() (*config, error) {
 	//Call the environment variables written in docker-compose.yaml
 	err := envconfig.Process("", &cfg)
 	if err != nil {
-		log.Fatal(err.Error())
+		logger.Warnf("os.Getenv failed: %+v", err)
 		return nil, err
 	}
 	fmt.Println(cfg)
