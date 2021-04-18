@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kelseyhightower/envconfig"
 )
 
 type config struct {
@@ -28,18 +28,27 @@ func (cfg *config) dbSrc() string {
 		cfg.DbName)
 }
 
-func loadConfig() (*config, error) {
+func loadConfig() *config {
 
-	var cfg config
 	//Call the environment variables written in docker-compose.yaml
-	err := envconfig.Process("", &cfg)
-	if err != nil {
-		logger.Warnf("os.Getenv failed: %+v", err)
-		return nil, err
+	cfg := config{
+		DbDriver:   envOrDefault("DBDRIVER", "mysql"),
+		DbHost:     envOrDefault("DBHOST", "go_db"),
+		DbPort:     envOrDefault("DBPORT", "3306"),
+		DbUserName: envOrDefault("DBUSERNAME", "root"),
+		DbPassword: envOrDefault("DBPASSWORD", "passw0rd"),
+		DbName:     envOrDefault("DBNAME", "techtraindb"),
 	}
-	fmt.Println(cfg)
 
-	return &cfg, nil
+	return &cfg
+}
+
+func envOrDefault(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }
 
 type DbConnection struct {
@@ -50,14 +59,9 @@ var sharedInstance *DbConnection = newDbConnection()
 
 func newDbConnection() *DbConnection {
 
-	cfg, err := loadConfig()
-	if err != nil {
-		log.Fatalf("Error when executing loadConfig: %s", err)
-		return nil
-	}
+	cfg := loadConfig()
 
 	pool, err := sql.Open(cfg.DbDriver, cfg.dbSrc())
-	fmt.Println(pool)
 	if err != nil {
 		log.Fatalf("Error when executing sql.Open: %s", err)
 		return nil
