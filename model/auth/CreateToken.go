@@ -7,12 +7,12 @@ import (
 )
 
 //Pass a unique id and return a token
-func CreateToken(id int) (string, error) {
+func CreateToken(userId int) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	token.Claims = jwt.MapClaims{
-		"id":  id,
-		"exp": time.Now().Add(time.Hour * 1).Unix(),
+		"user_id": userId,
+		"exp":     time.Now().Add(time.Hour * 1).Unix(),
 	}
 
 	var secretKey = "secret"

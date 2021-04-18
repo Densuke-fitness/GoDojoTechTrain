@@ -28,10 +28,10 @@ func UpdateUser(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	// extract userid
-	id := int(decodedtoken["id"].(float64))
+	userId := int(decodedtoken["user_id"].(float64))
 
 	//Update
-	_, err = UpdateNameById(request.Name, id)
+	_, err = UpdateNameById(request.Name, userId)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error updating name"`)) //nolint
