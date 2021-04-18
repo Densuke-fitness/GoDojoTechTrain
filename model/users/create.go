@@ -30,7 +30,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	//jwt prosess
-	token, err := auth.CreateToken(int(id))
+	token, err := auth.CreateToken(id)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error creating the token"`)) //nolint

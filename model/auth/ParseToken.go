@@ -6,7 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func checkToken(token string) (*jwt.Token, error) {
+func parseToken(token string) (*jwt.Token, error) {
 	t, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})
@@ -20,9 +20,9 @@ func checkToken(token string) (*jwt.Token, error) {
 
 func DecodeToken(token string) (jwt.MapClaims, error) {
 
-	t, err := checkToken(token)
+	t, err := parseToken(token)
 	if err != nil {
-		log.Fatalf("Error implementing checkToken: %s", err)
+		log.Fatalf("Error implementing parseToken: %s", err)
 		return nil, err
 	}
 	return t.Claims.(jwt.MapClaims), nil

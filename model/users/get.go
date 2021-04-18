@@ -19,10 +19,10 @@ func GetUser(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	// extract userid
-	id := int(decodedtoken["id"].(float64))
+	userId := int(decodedtoken["user_id"].(float64))
 
 	//search name by using id
-	name, err := SelectNameById(id)
+	name, err := SelectNameById(userId)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error scanning name"`)) //nolint

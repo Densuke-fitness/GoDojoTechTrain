@@ -7,27 +7,27 @@ import (
 
 func TestCreateToken(t *testing.T) {
 
-	//a id
+	//a userId
 	tests := []struct {
-		id int
+		userId int
 	}{
-		{id: 1},
-		{id: 2},
-		{id: 3},
-		{id: 4},
-		{id: 5},
-		{id: 6},
-		{id: 7},
-		{id: 8},
-		{id: 9},
-		{id: 10},
+		{userId: 1},
+		{userId: 2},
+		{userId: 3},
+		{userId: 4},
+		{userId: 5},
+		{userId: 6},
+		{userId: 7},
+		{userId: 8},
+		{userId: 9},
+		{userId: 10},
 	}
 
 	for _, tt := range tests {
-		name := fmt.Sprintf("number:%v", tt.id)
+		name := fmt.Sprintf("number:%v", tt.userId)
 
 		t.Run(name, func(t *testing.T) {
-			_, err := CreateToken(tt.id)
+			_, err := CreateToken(tt.userId)
 			if err != nil {
 				t.Errorf("Error implementing CreateToken: %s", err.Error())
 			}
