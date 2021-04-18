@@ -4,8 +4,9 @@
 Make sure that the godojotechtrain project is in the root folder and enter the following command .
 ```
 docker-compose up -d
-
-#or "dokcker compose" command based by golang
+```
+or "docker compose" command based by golang
+```
 docker compose up -d
 ```
 ### Check the mysql database.

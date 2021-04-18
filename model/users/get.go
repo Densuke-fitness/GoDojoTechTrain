@@ -18,9 +18,12 @@ func GetUser(resp http.ResponseWriter, req *http.Request) {
 		resp.Write([]byte(`"error": "Error decoding token"`)) //nolint
 	}
 
+	if decodedtoken["user_id"] == nil {
+		resp.WriteHeader(http.StatusBadRequest)
+		resp.Write([]byte(`"error": "Not found user_id"`)) //nolint
+	}
 	// extract userid
 	userId := int(decodedtoken["user_id"].(float64))
-
 	//search name by using id
 	name, err := SelectNameById(userId)
 	if err != nil {
