@@ -43,8 +43,8 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: test
-        run: go test ./... -v
+      - name: Test with docker-compose stack
+        run: sh testing_go_db.sh 
 
   # lintを通す
   lint:

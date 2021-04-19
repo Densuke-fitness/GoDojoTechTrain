@@ -51,6 +51,13 @@ curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://loc
 
 [![Image from Gyazo](https://i.gyazo.com/7b337faf2602fc828cbac398ff666fdf.png)](https://gyazo.com/7b337faf2602fc828cbac398ff666fdf)
 
+## Testing
+
+```
+
+```
+
+
 ### Appendix
 
 **ERD**
@@ -63,3 +70,4 @@ curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://loc
 - [Github ActionsでGoのCI環境を作成する](https://blog.mmmcorp.co.jp/blog/2021/01/10/golangci-lint-circleci/)
 - [Go言語で理解するJWT認証 実装ハンズオン](https://qiita.com/po3rin/items/740445d21487dfcb5d9f)
 - [Go database/sql tutorial](http://go-database-sql.org/index.html)
+- [コンテナで動くDBとアプリとの疎通をGithub Actionsでテストする](https://times.hrbrain.co.jp/entry/test-using-container-on-github-actions)

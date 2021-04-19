@@ -32,8 +32,10 @@ func loadConfig() *config {
 
 	//Call the environment variables written in docker-compose.yaml
 	cfg := config{
+		// If there is no environment variable,
+		//    the value of the test environment will be inserted.
 		DbDriver:   envOrDefault("DBDRIVER", "mysql"),
-		DbHost:     envOrDefault("DBHOST", "go_db"),
+		DbHost:     envOrDefault("DBHOST", "127.0.0.1"),
 		DbPort:     envOrDefault("DBPORT", "3306"),
 		DbUserName: envOrDefault("DBUSERNAME", "root"),
 		DbPassword: envOrDefault("DBPASSWORD", "passw0rd"),
@@ -66,6 +68,7 @@ func newDbConnection() *DbConnection {
 		logger.Errorf("Error when executing sql.Open: %s", err)
 		return nil
 	}
+	logger.Printf("pool information : %v", pool)
 
 	err = pool.Ping()
 	if err != nil {
