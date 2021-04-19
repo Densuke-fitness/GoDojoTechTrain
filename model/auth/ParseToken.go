@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"log"
+	logger "github.com/sirupsen/logrus"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -12,7 +12,7 @@ func parseToken(token string) (*jwt.Token, error) {
 	})
 
 	if err != nil {
-		log.Fatalf("Error implementing jwt.Parse: %s", err)
+		logger.Errorf("Error implementing jwt.Parse: %s", err)
 		return t, err
 	}
 	return t, nil
@@ -22,7 +22,7 @@ func DecodeToken(token string) (jwt.MapClaims, error) {
 
 	t, err := parseToken(token)
 	if err != nil {
-		log.Fatalf("Error implementing parseToken: %s", err)
+		logger.Errorf("Error implementing parseToken: %s", err)
 		return nil, err
 	}
 	return t.Claims.(jwt.MapClaims), nil

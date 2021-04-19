@@ -3,10 +3,10 @@ package dbConnection
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	logger "github.com/sirupsen/logrus"
 )
 
 type config struct {
@@ -63,7 +63,7 @@ func newDbConnection() *DbConnection {
 
 	pool, err := sql.Open(cfg.DbDriver, cfg.dbSrc())
 	if err != nil {
-		log.Fatalf("Error when executing sql.Open: %s", err)
+		logger.Errorf("Error when executing sql.Open: %s", err)
 		return nil
 	}
 
