@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o bin/api .
+RUN go build -o bin/api -ldflags '-s -w'
 
 FROM alpine:3.11
 COPY --from=builder /app/bin/api /app/api
