@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/auth"
+	logger "github.com/sirupsen/logrus"
 )
 
 func CreateUser(resp http.ResponseWriter, req *http.Request) {
@@ -16,7 +17,8 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	}{}
 	err := json.NewDecoder(req.Body).Decode(&request)
 	if err != nil {
-		resp.WriteHeader(http.StatusInternalServerError)
+		logger.Warnf("Error json.NewDecoder(req.Body).Decode: %s", err)
+		resp.WriteHeader(http.StatusBadRequest)
 		resp.Write([]byte(`"error": "Error unmarshalling the request"`)) //nolint
 		return
 	}
@@ -24,6 +26,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	//database prosess
 	id, err := Insert(request.Name)
 	if err != nil {
+		logger.Errorf("Error Insert: %s", err)
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error inserting the name"`)) //nolint
 		return
@@ -32,6 +35,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	//jwt prosess
 	token, err := auth.CreateToken(id)
 	if err != nil {
+		logger.Errorf("Error auth.CreateToken: %s", err)
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error creating the token"`)) //nolint
 		return
@@ -43,6 +47,7 @@ func CreateUser(resp http.ResponseWriter, req *http.Request) {
 	}{Token: token}
 	result, err := json.Marshal(&response)
 	if err != nil {
+		logger.Errorf("Error json.Marshal: %s", err)
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(`"error": "Error marshalling data"`)) //nolint
 		return
