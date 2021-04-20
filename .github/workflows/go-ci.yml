@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Test with docker-compose stack
-        run: sh testing_go_db.sh 
+        run: sh testing.sh 
 
   # lintを通す
   lint:
