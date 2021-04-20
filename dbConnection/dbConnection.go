@@ -41,6 +41,7 @@ func loadConfig() *config {
 		DbPassword: envOrDefault("DBPASSWORD", "passw0rd"),
 		DbName:     envOrDefault("DBNAME", "techtraindb"),
 	}
+	fmt.Println(cfg, cfg.DbHost)
 
 	return &cfg
 }
