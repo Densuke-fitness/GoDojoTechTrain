@@ -54,7 +54,7 @@ curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://loc
 ## Testing
 
 ```
-
+sh testing.sh 
 ```
 
 
