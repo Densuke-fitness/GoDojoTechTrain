@@ -49,5 +49,4 @@ func TestContoller(t *testing.T) {
 	//TODO: testing GetUser
 
 	//TODO: testing UpdateUser
-
 }

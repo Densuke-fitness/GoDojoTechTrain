@@ -67,9 +67,9 @@ func TestDecodeToken(t *testing.T) {
 			if err != nil {
 				t.Errorf("Error implementing parseToken: %s", err.Error())
 			}
-			got_userId := int(got["user_id"].(float64))
-			if got_userId != tt.want {
-				t.Errorf(`Error DecodeToken: %v but want %q`, got_userId, tt.want)
+			gotUserId := int(got["user_id"].(float64))
+			if gotUserId != tt.want {
+				t.Errorf(`Error DecodeToken: %v but want %q`, gotUserId, tt.want)
 			}
 		})
 	}
