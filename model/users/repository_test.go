@@ -32,12 +32,12 @@ func TestRepository(t *testing.T) {
 			}
 
 			//test Select
-			got_name, err := SelectNameById(id)
+			gotName, err := SelectNameById(id)
 			if err != nil {
 				t.Errorf("Error implementing SelectNameById: %s", err.Error())
 			}
-			if got_name != tt.name {
-				t.Errorf(`Error SelectNameById: %v but want %q`, got_name, tt.name)
+			if gotName != tt.name {
+				t.Errorf(`Error SelectNameById: %v but want %q`, gotName, tt.name)
 			}
 
 			//test Update
@@ -45,9 +45,9 @@ func TestRepository(t *testing.T) {
 			if err != nil {
 				t.Errorf("Error implementing UpdateNameById: %s", err.Error())
 			}
-			got_name, _ = SelectNameById(id)
-			if got_name != tt.newName {
-				t.Errorf(`Error UpdateNameById(SelectNameById): %v but want %q`, got_name, tt.newName)
+			gotName, _ = SelectNameById(id)
+			if gotName != tt.newName {
+				t.Errorf(`Error UpdateNameById(SelectNameById): %v but want %q`, gotName, tt.newName)
 			}
 		})
 
