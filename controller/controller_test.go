@@ -11,8 +11,7 @@ import (
 
 // // testUserData
 const (
-	name    = "TestUser"
-	newName = "TestNewUser"
+	name = "TestUser"
 )
 
 // POST /user/create に対するtest
