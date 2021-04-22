@@ -2,6 +2,9 @@
 echo "docker-compose up -d go_db"
 docker-compose up -d go_db
 
+echo "sleep 5s"
+sleep 5s
+
 echo "go test ./... -v"
 go test ./... -v
 
