@@ -17,7 +17,7 @@ mysql -u root -ppassw0rd
 
 use techtraindb
 
-#chech users table .
+#check users table .
 select * from users;
 ```
 
