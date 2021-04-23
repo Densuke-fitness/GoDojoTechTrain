@@ -34,7 +34,9 @@ func SelectNameById(id int) (string, error) {
 	db := dbConn.GetConnection()
 
 	var name string
-	row := db.QueryRow("SELECT name FROM users WHERE id = ?", id)
+
+	const sql = "SELECT name FROM users WHERE id = ?"
+	row := db.QueryRow(sql, id)
 	if err := row.Scan(&name); err != nil {
 		return "", err
 	}
