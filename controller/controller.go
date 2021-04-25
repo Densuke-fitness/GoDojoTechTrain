@@ -4,18 +4,19 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Densuke-fitness/GoDojoTechTrain/model/gacha"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/users"
 	"github.com/Densuke-fitness/GoDojoTechTrain/view"
 )
 
 func CreateUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
-		//Structure to be stored when a request is received from a user
-		var request = struct {
+		//Structure to be stored when a reqParams is received from a user
+		var reqParams = struct {
 			Name string `json:"name"`
 		}{}
 
-		err := json.NewDecoder(req.Body).Decode(&request)
+		err := json.NewDecoder(req.Body).Decode(&reqParams)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -27,7 +28,7 @@ func CreateUser() http.HandlerFunc {
 		}
 
 		// Passing values to the model and executing the process
-		token, err := users.CreateUser(request.Name)
+		token, err := users.CreateUser(reqParams.Name)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -38,11 +39,13 @@ func CreateUser() http.HandlerFunc {
 			return
 		}
 
-		response := struct {
-			Token string `json:"token"`
-		}{Token: token}
-
-		result, err := json.Marshal(&response)
+		result, err := json.Marshal(
+			&struct {
+				Token string `json:"token"`
+			}{
+				Token: token,
+			},
+		)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -72,11 +75,13 @@ func GetUser() http.HandlerFunc {
 			return
 		}
 
-		response := struct {
-			Name string `json:"name"`
-		}{Name: name}
-
-		result, err := json.Marshal(&response)
+		result, err := json.Marshal(
+			&struct {
+				Name string `json:"name"`
+			}{
+				Name: name,
+			},
+		)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -94,10 +99,10 @@ func GetUser() http.HandlerFunc {
 func UpdateUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
-		var request = struct {
+		var reqParams = struct {
 			Name string `json:"name"`
 		}{}
-		err := json.NewDecoder(req.Body).Decode(&request)
+		err := json.NewDecoder(req.Body).Decode(&reqParams)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -111,7 +116,7 @@ func UpdateUser() http.HandlerFunc {
 		//fetch token and extract userid
 		token := req.Header.Get("X-Auth-Token")
 
-		err = users.UpdateUser(request.Name, token)
+		err = users.UpdateUser(reqParams.Name, token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -122,5 +127,51 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 		view.SuccessView(resp, nil)
+	}
+}
+
+func DrawGacha() http.HandlerFunc {
+	return func(resp http.ResponseWriter, req *http.Request) {
+
+		var reqParams = struct {
+			Times int `json:"times"`
+		}{}
+		err := json.NewDecoder(req.Body).Decode(&reqParams)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error unmarshalling the request",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		//fetch token and extract userid
+		token := req.Header.Get("X-Auth-Token")
+
+		results, err := gacha.DrawGacha(reqParams.Times, token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error executing model process",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		gachaResults, err := json.Marshal(&results)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error marshalling data",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		view.SuccessView(resp, gachaResults)
 	}
 }
