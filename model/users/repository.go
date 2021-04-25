@@ -50,6 +50,7 @@ func UpdateNameById(name string, id int) (sql.Result, error) {
 	db := dbConn.GetConnection()
 
 	const sql = "UPDATE users SET name = ? WHERE id = ?"
+	//Since the number of updates was originally returned, the result was adopted as the return value.
 	result, err := db.Exec(sql, name, id)
 	return result, err
 }
