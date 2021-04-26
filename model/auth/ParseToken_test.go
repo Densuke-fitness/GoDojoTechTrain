@@ -5,42 +5,8 @@ import (
 	"testing"
 )
 
-func TestParseToken(t *testing.T) {
+func TestAuth(t *testing.T) {
 
-	//a userId
-	tests := []struct {
-		n      int
-		userId int
-	}{
-		{n: 1, userId: 1},
-		{n: 2, userId: 2},
-		{n: 3, userId: 3},
-		{n: 4, userId: 4},
-		{n: 5, userId: 5},
-		{n: 6, userId: 6},
-		{n: 7, userId: 7},
-		{n: 8, userId: 8},
-		{n: 9, userId: 9},
-		{n: 10, userId: 10},
-	}
-
-	for _, tt := range tests {
-		name := fmt.Sprintf("number:%v", tt.n)
-
-		t.Run(name, func(t *testing.T) {
-			got, _ := CreateToken(tt.userId)
-			_, err := parseToken(got)
-			if err != nil {
-				t.Errorf("Error implementing parseToken: %s", err.Error())
-			}
-		})
-	}
-
-}
-
-func TestDecodeToken(t *testing.T) {
-
-	//a userId
 	tests := []struct {
 		n      int
 		userId int
@@ -62,7 +28,10 @@ func TestDecodeToken(t *testing.T) {
 		name := fmt.Sprintf("number:%v", tt.n)
 
 		t.Run(name, func(t *testing.T) {
-			token, _ := CreateToken(tt.userId)
+			token, err := CreateToken(tt.userId)
+			if err != nil {
+				t.Errorf("Error implementing parseToken: %s", err.Error())
+			}
 			got, err := DecodeToken(token)
 			if err != nil {
 				t.Errorf("Error implementing parseToken: %s", err.Error())
