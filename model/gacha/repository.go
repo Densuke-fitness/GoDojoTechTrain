@@ -17,6 +17,7 @@ func Select(userLotteryNum float64) (string, int, error) {
 
 	rows, err := db.Query(sql)
 	if err != nil {
+		//Initial value is 0, but since the value of rows can be 0 (normal), we set it to -1
 		return "", -1, err
 	}
 
@@ -41,4 +42,19 @@ func Select(userLotteryNum float64) (string, int, error) {
 	}
 
 	return characterName, characterId, nil
+
 }
+
+// func Insert(userId int, characterId int) (sql.Result, error) {
+// 	//search character_name,character_id  by using userId
+// 	dbConn := dbConnection.GetInstance()
+
+// 	db := dbConn.GetConnection()
+
+// 	//Execute select to get the sequence
+// 	const sql1 =  "INSERT INTO possession_character(user_id, character_id, ) VALUES (?)"
+
+// 	const sql2 = "INSERT INTO possession_character(user_id, character_id, ) VALUES (?)"
+// 	result, err := db.Exec(sql, e, id)
+// 	return result, err
+// }

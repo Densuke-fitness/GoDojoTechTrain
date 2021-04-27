@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `characters_lottery_rate`
 INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (1, 1, 0.35);
 INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (2, 2, 0.3);
 INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (3, 3, 0.2);
-INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (4, 3, 0.15);
+INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (4, 4, 0.15);
 
 CREATE TABLE IF NOT EXISTS `characters_lottery_rate_description`
 (
