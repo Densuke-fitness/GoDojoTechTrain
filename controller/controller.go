@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Densuke-fitness/GoDojoTechTrain/model/gacha"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/users"
 	"github.com/Densuke-fitness/GoDojoTechTrain/view"
 )
@@ -129,48 +130,48 @@ func UpdateUser() http.HandlerFunc {
 	}
 }
 
-// func DrawGacha() http.HandlerFunc {
-// 	return func(resp http.ResponseWriter, req *http.Request) {
+func DrawGacha() http.HandlerFunc {
+	return func(resp http.ResponseWriter, req *http.Request) {
 
-// 		var reqParams = struct {
-// 			Times int `json:"times"`
-// 		}{}
-// 		err := json.NewDecoder(req.Body).Decode(&reqParams)
-// 		if err != nil {
-// 			params := view.ErrorViewParams{
-// 				Error:      err,
-// 				StatusCode: http.StatusInternalServerError,
-// 				Message:    "Error unmarshalling the request",
-// 			}
-// 			view.ErrorView(resp, params)
-// 			return
-// 		}
+		var reqParams = struct {
+			Times int `json:"times"`
+		}{}
+		err := json.NewDecoder(req.Body).Decode(&reqParams)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error unmarshalling the request",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
 
-// 		//fetch token and extract userid
-// 		token := req.Header.Get("X-Auth-Token")
+		//fetch token and extract userid
+		token := req.Header.Get("X-Auth-Token")
 
-// 		results, err := gacha.DrawGacha(reqParams.Times, token)
-// 		if err != nil {
-// 			params := view.ErrorViewParams{
-// 				Error:      err,
-// 				StatusCode: http.StatusInternalServerError,
-// 				Message:    "Error executing model process",
-// 			}
-// 			view.ErrorView(resp, params)
-// 			return
-// 		}
+		results, err := gacha.DrawGacha(reqParams.Times, token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error executing model process",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
 
-// 		gachaResults, err := json.Marshal(&results)
-// 		if err != nil {
-// 			params := view.ErrorViewParams{
-// 				Error:      err,
-// 				StatusCode: http.StatusInternalServerError,
-// 				Message:    "Error marshalling data",
-// 			}
-// 			view.ErrorView(resp, params)
-// 			return
-// 		}
+		gachaResults, err := json.Marshal(&results)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error marshalling data",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
 
-// 		view.SuccessView(resp, gachaResults)
-// 	}
-// }
+		view.SuccessView(resp, gachaResults)
+	}
+}
