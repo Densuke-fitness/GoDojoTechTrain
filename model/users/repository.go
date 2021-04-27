@@ -12,19 +12,31 @@ func Insert(name string) (int, error) {
 
 	db := dbConn.GetConnection()
 
+	tx, err := db.Begin()
+	if err != nil {
+		return -1, err
+	}
+
 	const sql = "INSERT INTO users(name) VALUES (?)"
 	//Save the name data (id is automatically generated)
-	r, err := db.Exec(sql, name)
+	r, err := tx.Exec(sql, name)
 	if err != nil {
+		tx.Rollback()
 		return -1, err
 	}
 
 	id, err := r.LastInsertId()
 	if err != nil {
+		tx.Rollback()
 		return -1, err
 	}
-	return int(id), nil
 
+	err = tx.Commit()
+	if err != nil {
+		return -1, err
+	}
+
+	return int(id), nil
 }
 
 func SelectNameById(id int) (string, error) {
@@ -33,13 +45,25 @@ func SelectNameById(id int) (string, error) {
 
 	db := dbConn.GetConnection()
 
+	tx, err := db.Begin()
+	if err != nil {
+		return "", err
+	}
+
 	var name string
 
 	const sql = "SELECT name FROM users WHERE id = ?"
-	row := db.QueryRow(sql, id)
+	row := tx.QueryRow(sql, id)
 	if err := row.Scan(&name); err != nil {
+		tx.Rollback()
 		return "", err
 	}
+
+	err = tx.Commit()
+	if err != nil {
+		return "", err
+	}
+
 	return name, nil
 }
 
@@ -49,8 +73,23 @@ func UpdateNameById(name string, id int) (sql.Result, error) {
 
 	db := dbConn.GetConnection()
 
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
 	const sql = "UPDATE users SET name = ? WHERE id = ?"
 	//Since the number of updates was originally returned, the result was adopted as the return value.
-	result, err := db.Exec(sql, name, id)
-	return result, err
+	result, err := tx.Exec(sql, name, id)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
