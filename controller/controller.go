@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/users"
@@ -63,6 +64,7 @@ func GetUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
+		fmt.Println(token)
 		name, err := users.GetUser(token)
 		if err != nil {
 			params := view.ErrorViewParams{
