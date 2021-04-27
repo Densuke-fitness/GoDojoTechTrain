@@ -21,13 +21,13 @@ func Insert(name string) (int, error) {
 	//Save the name data (id is automatically generated)
 	r, err := tx.Exec(sql, name)
 	if err != nil {
-		tx.Rollback()
+		tx.Rollback() //nolint
 		return -1, err
 	}
 
 	id, err := r.LastInsertId()
 	if err != nil {
-		tx.Rollback()
+		tx.Rollback() //nolint
 		return -1, err
 	}
 
@@ -55,7 +55,7 @@ func SelectNameById(id int) (string, error) {
 	const sql = "SELECT name FROM users WHERE id = ?"
 	row := tx.QueryRow(sql, id)
 	if err := row.Scan(&name); err != nil {
-		tx.Rollback()
+		tx.Rollback() //nolint
 		return "", err
 	}
 
@@ -82,7 +82,7 @@ func UpdateNameById(name string, id int) (sql.Result, error) {
 	//Since the number of updates was originally returned, the result was adopted as the return value.
 	result, err := tx.Exec(sql, name, id)
 	if err != nil {
-		tx.Rollback()
+		tx.Rollback() //nolint
 		return nil, err
 	}
 
