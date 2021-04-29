@@ -50,10 +50,10 @@ func SelectNameById(id int) (string, error) {
 		return "", err
 	}
 
-	var name string
-
 	const sql = "SELECT name FROM users WHERE id = ?"
 	row := tx.QueryRow(sql, id)
+
+	var name string
 	if err := row.Scan(&name); err != nil {
 		tx.Rollback() //nolint
 		return "", err

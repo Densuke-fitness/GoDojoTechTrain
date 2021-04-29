@@ -32,7 +32,7 @@ Search in a browser → `http://localhost:9999`
 ### CreateUser
 You can throw the name in the request and get the token as a response .
 ```
- curl -X POST -H "Content-Type: application/json" -d '{"name":"TestUser"}' localhost:8080/user/create
+curl -X POST -H "Content-Type: application/json" -d '{"name":"TestUser"}' localhost:8080/user/create
 ```
 [![Image from Gyazo](https://i.gyazo.com/8dd2ceacfb56fdce9c861bf0a79847c8.png)](https://gyazo.com/8dd2ceacfb56fdce9c861bf0a79847c8)
 
@@ -50,6 +50,13 @@ curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://loc
 ```
 
 [![Image from Gyazo](https://i.gyazo.com/7b337faf2602fc828cbac398ff666fdf.png)](https://gyazo.com/7b337faf2602fc828cbac398ff666fdf)
+
+### DrawGacha
+
+Insert the token obtained by CreateUser into the x-auth-token in the http header and throw drawing gacha times as a request to draw gacha .
+```
+curl -X POST -H "X-Auth-Token:<token-key>" "Content-Type: application/json" -d '{"times":10}' localhost:8080/gacha/draw
+```
 
 ## Testing
 
