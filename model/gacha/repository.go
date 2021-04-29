@@ -32,7 +32,7 @@ func SelectLotteryRateAndCount() (map[float64]int, error) {
 	for rows.Next() {
 
 		if err := rows.Scan(&rate, &count); err != nil {
-			tx.Rollback()
+			tx.Rollback() //nolint
 			return nil, err
 		}
 
