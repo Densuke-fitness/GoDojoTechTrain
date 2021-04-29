@@ -40,6 +40,7 @@ func SelectLotteryRateAndCount() (map[float64]int, error) {
 	}
 
 	if err := rows.Err(); err != nil {
+		tx.Rollback() //nolint
 		return nil, err
 	}
 
@@ -71,7 +72,7 @@ func RandSelectCharacterByRate(rate float64) (string, int, error) {
 		SELECT T1.name, T2.character_id 
 		FROM characters_master AS T1
 		JOIN characters_lottery_rate AS T2
-		ON T1.id=T2.character_id 
+		ON T1.id = T2.character_id 
 		WHERE CAST(T2.lottery_rate AS CHAR) = ?
 		ORDER BY RAND() LIMIT 1
 	`)

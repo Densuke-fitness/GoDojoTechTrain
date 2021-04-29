@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Densuke-fitness/GoDojoTechTrain/model/character"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/gacha"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/users"
 	"github.com/Densuke-fitness/GoDojoTechTrain/view"
@@ -163,8 +164,38 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		//todo: rest api　のpost実装を参照する
 		result, err := json.Marshal(&gachaResults)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error marshalling data",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		view.SuccessView(resp, result)
+	}
+}
+
+func GetCharacterList() http.HandlerFunc {
+	return func(resp http.ResponseWriter, req *http.Request) {
+
+		token := req.Header.Get("X-Auth-Token")
+
+		characters, err := character.GetCharacterList(token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error executing model process",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		result, err := json.Marshal(&characters)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
