@@ -19,6 +19,7 @@ func main() {
 	router.HandleFunc("/user/get", controller.GetUser()).Methods("GET")
 	router.HandleFunc("/user/update", controller.UpdateUser()).Methods("PUT")
 	router.HandleFunc("/gacha/draw", controller.DrawGacha()).Methods("POST")
+	router.HandleFunc("/character/list", controller.GetCharacterList()).Methods("GET")
 	log.Println("Server listeining on port", port)
 	log.Fatalln(http.ListenAndServe(port, router))
 
