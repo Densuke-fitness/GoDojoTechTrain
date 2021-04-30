@@ -58,6 +58,12 @@ Insert the token obtained by CreateUser into the x-auth-token in the http header
 curl -X POST -H "X-Auth-Token:<token-key>" "Content-Type: application/json" -d '{"times":10}' localhost:8080/gacha/draw
 ```
 
+### GetCharacterList
+Insert the token obtained by CreateUser into the x-auth-token in the http header section and throw a request to obtain the characters you registerd　as a response　.
+```
+ curl -H "X-Auth-Token:<token-key>" http://localhost:8080/character/list
+```
+
 ## Testing
 
 ```
@@ -65,9 +71,7 @@ sh testing.sh
 ```
 
 
-### Appendix
-
-**ERD**
+## ERD
 - [TechTrainERD.drawio](https://drive.google.com/file/d/1eJ9z5BW58hKN4MKJkjldIqqWgjXTSEEe/view?usp=sharing)
 
 ### Reference
