@@ -33,10 +33,10 @@ CREATE TABLE IF NOT EXISTS `characters_lottery_rate`
     DEFAULT CHARSET = utf8mb4;
 
 -- Insert the default data.
-INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (1, 1, 0.35);
-INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (2, 2, 0.3);
+INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (1, 1, 0.3);
+INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (2, 2, 0.4);
 INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (3, 3, 0.1);
-INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (4, 4, 0.15);
+INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (4, 4, 0.2);
 INSERT INTO characters_lottery_rate (id, character_id, lottery_rate) VALUES (5, 5, 0.1);
 
 CREATE TABLE IF NOT EXISTS `characters_lottery_rate_description`
@@ -48,11 +48,11 @@ CREATE TABLE IF NOT EXISTS `characters_lottery_rate_description`
     DEFAULT CHARSET = utf8mb4;
 
 -- Insert the default data.
-INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (1, "Python rate");
-INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (2, "Golang rate");
-INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (3, "Jupyter rate");
-INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (4, "C# rate");
-INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (4, "JS rate");
+INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (1, "Python's rate group is 0.3");
+INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (2, "Golang rate group is 0.4");
+INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (3, "Jupyter rate group is 0.1");
+INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (4, "C# rate group is 0.2");
+INSERT INTO characters_lottery_rate_description (characters_lottery_rate_id, description) VALUES (5, "JS rate group is 0.1");
 
 CREATE TABLE IF NOT EXISTS `possession_characters`
 (

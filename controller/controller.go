@@ -132,7 +132,6 @@ func UpdateUser() http.HandlerFunc {
 	}
 }
 
-//TODO: not implemented
 func DrawGacha() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
