@@ -55,7 +55,7 @@ curl -XPUT  -H "X-Auth-Token:<token-key>" -d '{"name":"TestNewUser"}' http://loc
 
 Insert the token obtained by CreateUser into the x-auth-token in the http header and throw drawing gacha times as a request to draw gacha .
 ```
-curl -X POST -H "X-Auth-Token:<token-key>" "Content-Type: application/json" -d '{"times":10}' localhost:8080/gacha/draw
+curl -X POST -H "X-Auth-Token:<token-key>" -d '{"times":10}' localhost:8080/gacha/draw
 ```
 
 ### GetCharacterList
