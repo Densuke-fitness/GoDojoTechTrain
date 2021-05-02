@@ -3,8 +3,13 @@ package character
 import "github.com/Densuke-fitness/GoDojoTechTrain/dbConnection"
 
 type Character struct {
-	CharacterSeq int    `json:"characterSeq"`
-	CharacterId  int    `json:"characterId"`
+	/* About: CharacterSeq
+	In the api specification, the response name is described as userCharacterID,
+	but the id is a sequence number(CharacterSeq) and is difficult to understand,
+	so the field name is left as a sequence.
+	*/
+	CharacterSeq string `json:"userCharacterID"`
+	CharacterId  string `json:"characterId"`
 	Name         string `json:"name"`
 }
 
@@ -32,7 +37,7 @@ func SelectCharactersById(userId int) ([]Character, error) {
 		return nil, err
 	}
 
-	var Characters []Character
+	var characters []Character
 
 	for rows.Next() {
 		var c Character
@@ -40,7 +45,7 @@ func SelectCharactersById(userId int) ([]Character, error) {
 			tx.Rollback() //nolint
 			return nil, err
 		}
-		Characters = append(Characters, c)
+		characters = append(characters, c)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -53,6 +58,6 @@ func SelectCharactersById(userId int) ([]Character, error) {
 		return nil, err
 	}
 
-	return Characters, nil
+	return characters, nil
 
 }

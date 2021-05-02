@@ -72,8 +72,7 @@ func newDbConnection() *DbConnection {
 	logger.Printf("pool information : %v", pool)
 
 	if err = pool.Ping(); err != nil {
-		logger.Errorf("Error when executing pool.Ping: %s", err)
-		panic("Error  pool.Ping")
+		logger.Fatalf("Error when executing pool.Ping: %s", err)
 	}
 
 	return &DbConnection{

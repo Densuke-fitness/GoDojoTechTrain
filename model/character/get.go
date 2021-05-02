@@ -12,11 +12,11 @@ func GetCharacterList(token string) ([]Character, error) {
 		return nil, err
 	}
 
-	Characters, err := SelectCharactersById(userId)
+	characters, err := SelectCharactersById(userId)
 	if err != nil {
 		logger.Errorf("Error SelectCharactersById: %s", err)
 		return nil, err
 	}
 
-	return Characters, nil
+	return characters, nil
 }
