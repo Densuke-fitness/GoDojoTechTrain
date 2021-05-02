@@ -5,7 +5,7 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
-func SelectLotteryRateAndCount() (map[float64]int, error) {
+func SelectLotteryRateAndCount() ([]float64, error) {
 
 	dbConn := dbConnection.GetInstance()
 
@@ -16,7 +16,7 @@ func SelectLotteryRateAndCount() (map[float64]int, error) {
 		return nil, err
 	}
 
-	const sql = "SELECT lottery_rate, COUNT(lottery_rate) FROM characters_lottery_rate GROUP BY lottery_rate;"
+	const sql = "SELECT lottery_rate FROM characters_lottery_rate GROUP BY lottery_rate;"
 
 	rows, err := db.Query(sql)
 
@@ -25,18 +25,17 @@ func SelectLotteryRateAndCount() (map[float64]int, error) {
 		return nil, err
 	}
 
+	var LotteryRateList []float64
 	var rate float64
-	var count int
 
-	LotteryRateMap := map[float64]int{}
 	for rows.Next() {
 
-		if err := rows.Scan(&rate, &count); err != nil {
+		if err := rows.Scan(&rate); err != nil {
 			tx.Rollback() //nolint
 			return nil, err
 		}
 
-		LotteryRateMap[rate] = count
+		LotteryRateList = append(LotteryRateList, rate)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -49,7 +48,7 @@ func SelectLotteryRateAndCount() (map[float64]int, error) {
 		return nil, err
 	}
 
-	return LotteryRateMap, nil
+	return LotteryRateList, nil
 
 }
 
@@ -108,7 +107,12 @@ func Insert(userId int, characterId int) error {
 		INSERT INTO possession_characters(user_id, character_id, character_seq) VALUES (?, ?, ?);
 	`)
 
-	maxSeq := SelectMaxSeqNum(userId, characterId)
+	maxSeq, err := SelectMaxSeqNum(userId, characterId)
+	if err != nil {
+		tx.Rollback() //nolint
+		return err
+	}
+
 	maxSeq += 1
 
 	_, err = tx.Exec(sql, userId, characterId, maxSeq)
@@ -125,7 +129,7 @@ func Insert(userId int, characterId int) error {
 	return nil
 }
 
-func SelectMaxSeqNum(userId int, characterId int) int {
+func SelectMaxSeqNum(userId int, characterId int) (int, error) {
 	dbConn := dbConnection.GetInstance()
 
 	db := dbConn.GetConnection()
@@ -133,11 +137,11 @@ func SelectMaxSeqNum(userId int, characterId int) int {
 	tx, err := db.Begin()
 	if err != nil {
 		logger.Errorf("Error b.Begin: %s", err)
-		return -1
+		return -1, err
 	}
 
 	const sql = (`
-		SELECT  MAX(character_seq)
+		SELECT COALESCE(MAX(character_seq), 0)
 		FROM possession_characters
 		WHERE user_id = ?
 		AND character_id = ?
@@ -149,14 +153,14 @@ func SelectMaxSeqNum(userId int, characterId int) int {
 	if err := row.Scan(&maxSeq); err != nil {
 		logger.Errorf("Error row.Scan: %s", err)
 		tx.Rollback() //nolint
-		return 0
+		return -1, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		return 0
+		return -1, err
 	}
 
-	return maxSeq
+	return maxSeq, nil
 
 }

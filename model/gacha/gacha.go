@@ -3,13 +3,14 @@ package gacha
 
 import (
 	"math/rand"
+	"strconv"
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/model/jwtUtil"
 	logger "github.com/sirupsen/logrus"
 )
 
 type GachaResult struct {
-	CharacterId int    `json:"characterID"`
+	CharacterId string `json:"characterID"`
 	Name        string `json:"name"`
 }
 
@@ -21,18 +22,18 @@ func DrawGacha(times int, token string) ([]GachaResult, error) {
 		return nil, err
 	}
 
-	LotteryRateMap, err := SelectLotteryRateAndCount()
+	LotteryRateList, err := SelectLotteryRateAndCount()
 	if err != nil {
 		logger.Errorf("Error SelectLotteryRateAndCount: %s", err)
 		return nil, err
 	}
 
-	var GachaResults []GachaResult
+	var gachaResults []GachaResult
 
 	for i := 1; i <= times; i++ {
 		//the user draws randomly
 		userRandNum := rand.Float64()
-		rate := randChooseLotteryRate(userRandNum, LotteryRateMap)
+		rate := randChooseLotteryRate(userRandNum, LotteryRateList)
 		name, characterId, err := RandSelectCharacterByRate(rate)
 		if err != nil {
 			logger.Errorf("Error RandSelectCharacterByRate: %s", err)
@@ -44,24 +45,27 @@ func DrawGacha(times int, token string) ([]GachaResult, error) {
 			return nil, err
 		}
 
-		GachaResult := GachaResult{CharacterId: characterId, Name: name}
-		GachaResults = append(GachaResults, GachaResult)
+		characterIdStr := strconv.Itoa(characterId)
+
+		gachaResult := GachaResult{CharacterId: characterIdStr, Name: name}
+		gachaResults = append(gachaResults, gachaResult)
 	}
 
-	return GachaResults, err
+	return gachaResults, err
 }
 
-func randChooseLotteryRate(userRandNum float64, LotteryRateMap map[float64]int) float64 {
+func randChooseLotteryRate(userRandNum float64, LotteryRateList []float64) float64 {
 
 	ApplicableboundaryVal := 0.0
 
-	for rate, count := range LotteryRateMap {
-		ApplicableboundaryVal += rate * float64(count)
+	for _, rate := range LotteryRateList {
+		ApplicableboundaryVal += rate
 		//When the rate is within the boundary value
 		if userRandNum <= ApplicableboundaryVal {
 			return rate
 		}
 	}
 	//　If there is a problem with the selected value of user
+	logger.Error("Error randChooseLotteryRate")
 	return 0.0
 }
