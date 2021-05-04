@@ -16,9 +16,16 @@ func SelectLotteryRateAndCount() ([]float64, error) {
 		return nil, err
 	}
 
-	const sql = "SELECT lottery_rate FROM characters_lottery_rate GROUP BY lottery_rate;"
+	const sql = (`
+		SELECT lottery_rate 
+		FROM characters_lottery_rate 
+		WHERE event_id = ? 
+		GROUP BY lottery_rate
+	`)
 
-	rows, err := db.Query(sql)
+	//event_i = 1
+	const eventId = 1
+	rows, err := db.Query(sql, eventId)
 
 	if err != nil {
 		tx.Rollback() //nolint
