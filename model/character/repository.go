@@ -23,6 +23,8 @@ func SelectCharactersById(userId int) ([]Character, error) {
 		return nil, err
 	}
 
+	defer tx.Rollback() //nolint
+
 	const sql = (`
         SELECT T1.name, T2.character_id, T2.character_seq
 		FROM characters_master AS T1
@@ -33,7 +35,6 @@ func SelectCharactersById(userId int) ([]Character, error) {
 
 	rows, err := tx.Query(sql, userId)
 	if err != nil {
-		tx.Rollback() //nolint
 		return nil, err
 	}
 
@@ -42,14 +43,12 @@ func SelectCharactersById(userId int) ([]Character, error) {
 	for rows.Next() {
 		var c Character
 		if err := rows.Scan(&c.Name, &c.CharacterId, &c.CharacterSeq); err != nil {
-			tx.Rollback() //nolint
 			return nil, err
 		}
 		characters = append(characters, c)
 	}
 
 	if err := rows.Err(); err != nil {
-		tx.Rollback() //nolint
 		return nil, err
 	}
 
