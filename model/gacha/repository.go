@@ -16,6 +16,8 @@ func SelectLotteryRateAndCount() ([]float64, error) {
 		return nil, err
 	}
 
+	defer tx.Rollback() //nolint
+
 	const sql = (`
 		SELECT lottery_rate 
 		FROM characters_lottery_rate 
@@ -28,7 +30,6 @@ func SelectLotteryRateAndCount() ([]float64, error) {
 	rows, err := db.Query(sql, eventId)
 
 	if err != nil {
-		tx.Rollback() //nolint
 		return nil, err
 	}
 
@@ -38,7 +39,6 @@ func SelectLotteryRateAndCount() ([]float64, error) {
 	for rows.Next() {
 
 		if err := rows.Scan(&rate); err != nil {
-			tx.Rollback() //nolint
 			return nil, err
 		}
 
@@ -46,7 +46,6 @@ func SelectLotteryRateAndCount() ([]float64, error) {
 	}
 
 	if err := rows.Err(); err != nil {
-		tx.Rollback() //nolint
 		return nil, err
 	}
 
@@ -73,6 +72,8 @@ func RandSelectCharacterByRate(rate float64) (string, int, error) {
 		return "", -1, err
 	}
 
+	defer tx.Rollback() //nolint
+
 	//Execute select to get the sequence
 	const sql = (`
 		SELECT T1.name, T2.character_id 
@@ -87,7 +88,6 @@ func RandSelectCharacterByRate(rate float64) (string, int, error) {
 	var name string
 	var characterId int
 	if err := row.Scan(&name, &characterId); err != nil {
-		tx.Rollback() //nolint
 		return "", -1, err
 	}
 
@@ -110,13 +110,14 @@ func Insert(userId int, characterId int) error {
 		return err
 	}
 
+	defer tx.Rollback() //nolint
+
 	const sql = (`
 		INSERT INTO possession_characters(user_id, character_id, character_seq) VALUES (?, ?, ?);
 	`)
 
 	maxSeq, err := SelectMaxSeqNum(userId, characterId)
 	if err != nil {
-		tx.Rollback() //nolint
 		return err
 	}
 
@@ -124,7 +125,6 @@ func Insert(userId int, characterId int) error {
 
 	_, err = tx.Exec(sql, userId, characterId, maxSeq)
 	if err != nil {
-		tx.Rollback() //nolint
 		return err
 	}
 
@@ -147,6 +147,8 @@ func SelectMaxSeqNum(userId int, characterId int) (int, error) {
 		return -1, err
 	}
 
+	defer tx.Rollback() //nolint
+
 	const sql = (`
 		SELECT COALESCE(MAX(character_seq), 0)
 		FROM possession_characters
@@ -159,7 +161,6 @@ func SelectMaxSeqNum(userId int, characterId int) (int, error) {
 	var maxSeq int
 	if err := row.Scan(&maxSeq); err != nil {
 		logger.Errorf("Error row.Scan: %s", err)
-		tx.Rollback() //nolint
 		return -1, err
 	}
 
