@@ -1,7 +1,7 @@
 package jwtUtil
 
 import (
-	"github.com/Densuke-fitness/GoDojoTechTrain/model/auth"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/auth"
 	logger "github.com/sirupsen/logrus"
 )
 

@@ -1,7 +1,9 @@
 package users
 
 import (
-	"github.com/Densuke-fitness/GoDojoTechTrain/model/jwtUtil"
+	"github.com/Densuke-fitness/GoDojoTechTrain/model"
+	"github.com/Densuke-fitness/GoDojoTechTrain/repository/users"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/jwtUtil"
 	logger "github.com/sirupsen/logrus"
 )
 
@@ -12,12 +14,15 @@ func GetUser(token string) (string, error) {
 		logger.Errorf("Error ExtractUserIdFromToken: %s", err)
 		return "", err
 	}
+
+	userModelFromView := model.User{Id: userId}
+
 	//search name by using id
-	name, err := SelectNameById(userId)
+	user, err := users.SelectNameById(userModelFromView)
 	if err != nil {
 		logger.Errorf("Error SelectNameById: %s", err)
 		return "", err
 	}
 
-	return name, nil
+	return user.Name, nil
 }
