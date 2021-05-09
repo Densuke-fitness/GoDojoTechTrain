@@ -3,10 +3,11 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
-	"github.com/Densuke-fitness/GoDojoTechTrain/model/character"
-	"github.com/Densuke-fitness/GoDojoTechTrain/model/gacha"
-	"github.com/Densuke-fitness/GoDojoTechTrain/model/users"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/character"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/gacha"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/users"
 	"github.com/Densuke-fitness/GoDojoTechTrain/view"
 )
 
@@ -163,7 +164,23 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		result, err := json.Marshal(&gachaResults)
+		paramsToViewList := []struct {
+			CharacterId string `json:"characterId"`
+			Name        string `json:"name"`
+		}{}
+
+		for _, val := range gachaResults {
+			params := struct {
+				CharacterId string `json:"characterId"`
+				Name        string `json:"name"`
+			}{
+				CharacterId: strconv.Itoa(val.Id),
+				Name:        val.Name,
+			}
+			paramsToViewList = append(paramsToViewList, params)
+		}
+
+		result, err := json.Marshal(&paramsToViewList)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -194,7 +211,26 @@ func GetCharacterList() http.HandlerFunc {
 			return
 		}
 
-		result, err := json.Marshal(&characters)
+		paramsToViewList := []struct {
+			CharacterSeq string `json:"userCharacterID"`
+			CharacterId  string `json:"characterId"`
+			Name         string `json:"name"`
+		}{}
+
+		for _, val := range characters {
+			params := struct {
+				CharacterSeq string `json:"userCharacterID"`
+				CharacterId  string `json:"characterId"`
+				Name         string `json:"name"`
+			}{
+				CharacterSeq: strconv.Itoa(val.CharacterSeq),
+				CharacterId:  strconv.Itoa(val.Id),
+				Name:         val.Name,
+			}
+			paramsToViewList = append(paramsToViewList, params)
+		}
+
+		result, err := json.Marshal(&paramsToViewList)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,

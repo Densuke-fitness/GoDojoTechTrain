@@ -3,10 +3,6 @@
 ## Launching the Application
 Make sure that the godojotechtrain project is in the root folder and enter the following command .
 ```
-docker-compose up -d
-```
-or "docker compose" command based by golang
-```
 docker compose up -d
 ```
 ### Check the mysql database.
@@ -61,7 +57,7 @@ curl -X POST -H "X-Auth-Token:<token-key>" -d '{"times":10}' localhost:8080/gach
 ### GetCharacterList
 Insert the token obtained by CreateUser into the x-auth-token in the http header section and throw a request to obtain the characters you registerd　as a response　.
 ```
- curl -H "X-Auth-Token:<token-key>" http://localhost:8080/character/list
+curl -H "X-Auth-Token:<token-key>" http://localhost:8080/character/list
 ```
 
 ## Testing
