@@ -230,7 +230,7 @@ func GetCharacterList() http.HandlerFunc {
 			paramsToViewList = append(paramsToViewList, params)
 		}
 
-		result, err := json.Marshal(&characters)
+		result, err := json.Marshal(&paramsToViewList)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
