@@ -6,7 +6,7 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
-func Insert(user model.User, character model.Character) error {
+func Insert(user model.User, character model.Character) (err error) {
 
 	dbConn := dbConnection.GetInstance()
 
@@ -14,10 +14,21 @@ func Insert(user model.User, character model.Character) error {
 
 	tx, err := db.Begin()
 	if err != nil {
-		return err
+		return
 	}
 
-	defer tx.Rollback() //nolint
+	defer func() {
+		if err != nil {
+			tx.Rollback() //nolint
+		} else {
+			err = tx.Commit()
+			if err != nil {
+				return
+			} else {
+				return
+			}
+		}
+	}()
 
 	const sql = (`
 		INSERT INTO
@@ -27,15 +38,9 @@ func Insert(user model.User, character model.Character) error {
 
 	_, err = tx.Exec(sql, user.Id, character.Id, character.CharacterSeq)
 	if err != nil {
-		return err
+		return
 	}
-
-	err = tx.Commit()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return
 }
 
 func SelectMaxSeqNum(user model.User, character model.Character) (int, error) {
