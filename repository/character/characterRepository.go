@@ -3,6 +3,7 @@ package character
 import (
 	"github.com/Densuke-fitness/GoDojoTechTrain/dbConnection"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model"
+	"github.com/Densuke-fitness/GoDojoTechTrain/repository"
 	logger "github.com/sirupsen/logrus"
 )
 
@@ -17,18 +18,7 @@ func Insert(user model.User, character model.Character) (err error) {
 		return
 	}
 
-	defer func() {
-		if err != nil {
-			tx.Rollback() //nolint
-		} else {
-			err = tx.Commit()
-			if err != nil {
-				return
-			} else {
-				return
-			}
-		}
-	}()
+	defer repository.CommitOrRollBack(tx, err)
 
 	const sql = (`
 		INSERT INTO
@@ -43,7 +33,7 @@ func Insert(user model.User, character model.Character) (err error) {
 	return
 }
 
-func SelectMaxSeqNum(user model.User, character model.Character) (int, error) {
+func SelectMaxSeqNum(user model.User, character model.Character) (maxSeq int, err error) {
 	dbConn := dbConnection.GetInstance()
 
 	db := dbConn.GetConnection()
@@ -51,10 +41,10 @@ func SelectMaxSeqNum(user model.User, character model.Character) (int, error) {
 	tx, err := db.Begin()
 	if err != nil {
 		logger.Errorf("Error b.Begin: %s", err)
-		return -1, err
+		return
 	}
 
-	defer tx.Rollback() //nolint
+	defer repository.CommitOrRollBack(tx, err)
 
 	const sql = (`
 		SELECT COALESCE(MAX(character_seq), 0)
@@ -65,21 +55,15 @@ func SelectMaxSeqNum(user model.User, character model.Character) (int, error) {
 
 	row := tx.QueryRow(sql, user.Id, character.Id)
 
-	var maxSeq int
-	if err := row.Scan(&maxSeq); err != nil {
+	if err = row.Scan(&maxSeq); err != nil {
 		logger.Errorf("Error row.Scan: %s", err)
-		return -1, err
+		return
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		return -1, err
-	}
-
-	return maxSeq, nil
+	return
 }
 
-func SelectCharactersByUserId(user model.User) ([]model.Character, error) {
+func SelectCharactersByUserId(user model.User) (characters []model.Character, err error) {
 	dbConn := dbConnection.GetInstance()
 
 	db := dbConn.GetConnection()
@@ -89,7 +73,7 @@ func SelectCharactersByUserId(user model.User) ([]model.Character, error) {
 		return nil, err
 	}
 
-	defer tx.Rollback() //nolint
+	defer repository.CommitOrRollBack(tx, err)
 
 	const sql = (`
         SELECT T1.name, T2.character_id, T2.character_seq
@@ -101,28 +85,20 @@ func SelectCharactersByUserId(user model.User) ([]model.Character, error) {
 
 	rows, err := tx.Query(sql, user.Id)
 	if err != nil {
-		return nil, err
+		return
 	}
-
-	var characters []model.Character
 
 	for rows.Next() {
 		var c model.Character
-		if err := rows.Scan(&c.Name, &c.Id, &c.CharacterSeq); err != nil {
-			return nil, err
+		if err = rows.Scan(&c.Name, &c.Id, &c.CharacterSeq); err != nil {
+			return
 		}
 		characters = append(characters, c)
 	}
 
-	if err := rows.Err(); err != nil {
-		return nil, err
+	if err = rows.Err(); err != nil {
+		return
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		return nil, err
-	}
-
-	return characters, nil
-
+	return
 }
