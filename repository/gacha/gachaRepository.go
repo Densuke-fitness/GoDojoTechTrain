@@ -3,9 +3,10 @@ package gacha
 import (
 	"github.com/Densuke-fitness/GoDojoTechTrain/dbConnection"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model"
+	"github.com/Densuke-fitness/GoDojoTechTrain/repository"
 )
 
-func SelectLotteryRateList() ([]float64, error) {
+func SelectLotteryRateList() (LotteryRateList []float64, err error) {
 
 	dbConn := dbConnection.GetInstance()
 
@@ -13,10 +14,10 @@ func SelectLotteryRateList() ([]float64, error) {
 
 	tx, err := db.Begin()
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	defer tx.Rollback() //nolint
+	defer repository.CommitOrRollBack(tx, err)
 
 	const sql = (`
 		SELECT lottery_rate 
@@ -25,40 +26,33 @@ func SelectLotteryRateList() ([]float64, error) {
 		GROUP BY lottery_rate
 	`)
 
-	//event_i = 1
+	//event_id = 1
 	const eventId = 1
 	rows, err := db.Query(sql, eventId)
 
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	var LotteryRateList []float64
 	var rate float64
 
 	for rows.Next() {
 
-		if err := rows.Scan(&rate); err != nil {
-			return nil, err
+		if err = rows.Scan(&rate); err != nil {
+			return
 		}
 
 		LotteryRateList = append(LotteryRateList, rate)
 	}
 
-	if err := rows.Err(); err != nil {
-		return nil, err
+	if err = rows.Err(); err != nil {
+		return
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		return nil, err
-	}
-
-	return LotteryRateList, nil
-
+	return
 }
 
-func RandSelectCharacterByRate(rate float64) (*model.Character, error) {
+func RandSelectCharacterByRate(rate float64) (character *model.Character, err error) {
 	//search character_name,character_id  by using userId
 	dbConn := dbConnection.GetInstance()
 
@@ -69,7 +63,7 @@ func RandSelectCharacterByRate(rate float64) (*model.Character, error) {
 		return nil, err
 	}
 
-	defer tx.Rollback() //nolint
+	defer repository.CommitOrRollBack(tx, err)
 
 	//Execute select to get the sequence
 	const sql = (`
@@ -82,16 +76,9 @@ func RandSelectCharacterByRate(rate float64) (*model.Character, error) {
 	`)
 	row := tx.QueryRow(sql, rate)
 
-	character := model.Character{}
-
-	if err := row.Scan(&character.Name, &character.Id); err != nil {
-		return nil, err
+	if err = row.Scan(&character.Name, &character.Id); err != nil {
+		return
 	}
 
-	err = tx.Commit()
-	if err != nil {
-		return nil, err
-	}
-
-	return &character, nil
+	return
 }
