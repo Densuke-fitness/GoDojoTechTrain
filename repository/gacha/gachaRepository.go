@@ -1,6 +1,8 @@
 package gacha
 
 import (
+	"fmt"
+
 	"github.com/Densuke-fitness/GoDojoTechTrain/dbConnection"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model"
 	"github.com/Densuke-fitness/GoDojoTechTrain/repository"
@@ -45,6 +47,8 @@ func SelectLotteryRateList() (LotteryRateList []float64, err error) {
 		LotteryRateList = append(LotteryRateList, rate)
 	}
 
+	fmt.Println(LotteryRateList)
+
 	if err = rows.Err(); err != nil {
 		return
 	}
@@ -52,7 +56,7 @@ func SelectLotteryRateList() (LotteryRateList []float64, err error) {
 	return
 }
 
-func RandSelectCharacterByRate(rate float64) (character *model.Character, err error) {
+func RandSelectCharacterByRate(rate float64) (character model.Character, err error) {
 	//search character_name,character_id  by using userId
 	dbConn := dbConnection.GetInstance()
 
@@ -60,7 +64,7 @@ func RandSelectCharacterByRate(rate float64) (character *model.Character, err er
 
 	tx, err := db.Begin()
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	defer repository.CommitOrRollBack(tx, err)

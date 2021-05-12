@@ -41,13 +41,9 @@ func CreateUser() http.HandlerFunc {
 			return
 		}
 
-		result, err := json.Marshal(
-			&struct {
-				Token string `json:"token"`
-			}{
-				Token: token,
-			},
-		)
+		resParams := view.CreateUserRes{Token: token}
+
+		result, err := json.Marshal(resParams)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -77,14 +73,9 @@ func GetUser() http.HandlerFunc {
 			view.ErrorView(resp, params)
 			return
 		}
+		resParams := view.GetUserRes{Name: name}
 
-		result, err := json.Marshal(
-			&struct {
-				Name string `json:"name"`
-			}{
-				Name: name,
-			},
-		)
+		result, err := json.Marshal(resParams)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -164,20 +155,15 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		paramsToViewList := []struct {
-			CharacterId string `json:"characterId"`
-			Name        string `json:"name"`
-		}{}
+		paramsToViewList := []view.DrawGachaRes{}
 
 		for _, val := range gachaResults {
-			params := struct {
-				CharacterId string `json:"characterId"`
-				Name        string `json:"name"`
-			}{
+			resParams := view.DrawGachaRes{
 				CharacterId: strconv.Itoa(val.Id),
 				Name:        val.Name,
 			}
-			paramsToViewList = append(paramsToViewList, params)
+
+			paramsToViewList = append(paramsToViewList, resParams)
 		}
 
 		result, err := json.Marshal(&paramsToViewList)
@@ -211,23 +197,16 @@ func GetCharacterList() http.HandlerFunc {
 			return
 		}
 
-		paramsToViewList := []struct {
-			CharacterSeq string `json:"userCharacterID"`
-			CharacterId  string `json:"characterId"`
-			Name         string `json:"name"`
-		}{}
+		paramsToViewList := []view.GetCharacterListRes{}
 
 		for _, val := range characters {
-			params := struct {
-				CharacterSeq string `json:"userCharacterID"`
-				CharacterId  string `json:"characterId"`
-				Name         string `json:"name"`
-			}{
+			resParams := view.GetCharacterListRes{
 				CharacterSeq: strconv.Itoa(val.CharacterSeq),
 				CharacterId:  strconv.Itoa(val.Id),
 				Name:         val.Name,
 			}
-			paramsToViewList = append(paramsToViewList, params)
+
+			paramsToViewList = append(paramsToViewList, resParams)
 		}
 
 		result, err := json.Marshal(&paramsToViewList)
