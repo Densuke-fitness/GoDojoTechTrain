@@ -7,12 +7,6 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
-type ErrorViewParams struct {
-	Error      error
-	StatusCode int
-	Message    string
-}
-
 func ErrorView(resp http.ResponseWriter, params ErrorViewParams) {
 	resp.Header().Set("Content-type", "application/json")
 
@@ -20,4 +14,10 @@ func ErrorView(resp http.ResponseWriter, params ErrorViewParams) {
 	resp.WriteHeader(params.StatusCode)
 	resp.Write([]byte(fmt.Sprintf(`"error": "%s"`, params.Message))) //nolint
 
+}
+
+type ErrorViewParams struct {
+	Error      error
+	StatusCode int
+	Message    string
 }
