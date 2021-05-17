@@ -7,6 +7,8 @@ import (
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/character"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/gacha"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService/auth"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/users"
 	"github.com/Densuke-fitness/GoDojoTechTrain/view"
 )
@@ -30,12 +32,23 @@ func CreateUser() http.HandlerFunc {
 		}
 
 		// Passing values to the model and executing the process
-		token, err := users.CreateUser(reqParams.Name)
+		userId, err := users.CreateUser(reqParams.Name)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
 				Message:    "Error executing model process",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		token, err := auth.CreateToken(userId)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error creating token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -62,8 +75,18 @@ func GetUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
+		userId, err := tokenService.ExtractUserIdFromToken(token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
+				Message:    "Invalid token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
 
-		name, err := users.GetUser(token)
+		name, err := users.GetUser(userId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -93,10 +116,23 @@ func GetUser() http.HandlerFunc {
 func UpdateUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
+		//fetch token and extract userid
+		token := req.Header.Get("X-Auth-Token")
+		userId, err := tokenService.ExtractUserIdFromToken(token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
+				Message:    "Invalid token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
 		var reqParams = struct {
 			Name string `json:"name"`
 		}{}
-		err := json.NewDecoder(req.Body).Decode(&reqParams)
+		err = json.NewDecoder(req.Body).Decode(&reqParams)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -107,10 +143,7 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 
-		//fetch token and extract userid
-		token := req.Header.Get("X-Auth-Token")
-
-		err = users.UpdateUser(reqParams.Name, token)
+		err = users.UpdateUser(reqParams.Name, userId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -141,10 +174,31 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
+		if reqParams.Times <= 0 {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
+				Message:    "The value of times must be at least 1.",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+		
+
 		//fetch token and extract userid
 		token := req.Header.Get("X-Auth-Token")
+		userId, err := tokenService.ExtractUserIdFromToken(token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
+				Message:    "Invalid token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
 
-		gachaResults, err := gacha.DrawGacha(reqParams.Times, token)
+		gachaResults, err := gacha.DrawGacha(reqParams.Times, userId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -185,8 +239,18 @@ func GetCharacterList() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
+		userId, err := tokenService.ExtractUserIdFromToken(token)
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
+				Message:    "Invalid token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
 
-		characters, err := character.GetCharacterList(token)
+		characters, err := character.GetCharacterList(userId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
