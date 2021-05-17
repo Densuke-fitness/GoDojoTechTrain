@@ -1,7 +1,7 @@
-package jwtUtil
+package tokenService
 
 import (
-	"github.com/Densuke-fitness/GoDojoTechTrain/service/auth"
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService/auth"
 	logger "github.com/sirupsen/logrus"
 )
 

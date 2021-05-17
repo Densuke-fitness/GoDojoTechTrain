@@ -7,7 +7,6 @@ import (
 	"github.com/Densuke-fitness/GoDojoTechTrain/model"
 	"github.com/Densuke-fitness/GoDojoTechTrain/repository/character"
 	"github.com/Densuke-fitness/GoDojoTechTrain/repository/gacha"
-	"github.com/Densuke-fitness/GoDojoTechTrain/service/jwtUtil"
 	logger "github.com/sirupsen/logrus"
 )
 
@@ -16,13 +15,7 @@ import (
 // 	Name        string `json:"name"`
 // }
 
-func DrawGacha(times int, token string) ([]model.Character, error) {
-
-	userId, err := jwtUtil.ExtractUserIdFromToken(token)
-	if err != nil {
-		logger.Errorf("Error ExtractUserIdFromToken: %s", err)
-		return nil, err
-	}
+func DrawGacha(times int, userId int) ([]model.Character, error) {
 
 	userModelFromView := model.User{Id: userId}
 
