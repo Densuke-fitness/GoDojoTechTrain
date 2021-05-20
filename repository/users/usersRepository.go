@@ -44,14 +44,8 @@ func SelectNameById(user model.User) (ret *model.User, err error) {
 
 	db := dbConn.GetConnection()
 
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
-	defer repository.CommitOrRollBack(tx, err)
-
 	const sql = "SELECT name FROM users WHERE id = ?"
-	row := tx.QueryRow(sql, user.Id)
+	row := db.QueryRow(sql, user.Id)
 
 	if err = row.Scan(&user.Name); err != nil {
 		return
