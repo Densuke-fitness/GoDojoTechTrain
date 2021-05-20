@@ -38,14 +38,6 @@ func SelectMaxSeqNum(user model.User, character model.Character) (maxSeq int, er
 
 	db := dbConn.GetConnection()
 
-	tx, err := db.Begin()
-	if err != nil {
-		logger.Errorf("Error b.Begin: %s", err)
-		return
-	}
-
-	defer repository.CommitOrRollBack(tx, err)
-
 	const sql = (`
 		SELECT COALESCE(MAX(character_seq), 0)
 		FROM possession_characters
@@ -53,7 +45,7 @@ func SelectMaxSeqNum(user model.User, character model.Character) (maxSeq int, er
 		AND character_id = ?
 	`)
 
-	row := tx.QueryRow(sql, user.Id, character.Id)
+	row := db.QueryRow(sql, user.Id, character.Id)
 
 	if err = row.Scan(&maxSeq); err != nil {
 		logger.Errorf("Error row.Scan: %s", err)
@@ -68,13 +60,6 @@ func SelectCharactersByUserId(user model.User) (characters []model.Character, er
 
 	db := dbConn.GetConnection()
 
-	tx, err := db.Begin()
-	if err != nil {
-		return nil, err
-	}
-
-	defer repository.CommitOrRollBack(tx, err)
-
 	const sql = (`
         SELECT T1.name, T2.character_id, T2.character_seq
 		FROM characters_master AS T1
@@ -83,7 +68,7 @@ func SelectCharactersByUserId(user model.User) (characters []model.Character, er
 		WHERE user_id = ?
 	`)
 
-	rows, err := tx.Query(sql, user.Id)
+	rows, err := db.Query(sql, user.Id)
 	if err != nil {
 		return
 	}

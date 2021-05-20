@@ -5,7 +5,6 @@ import (
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/dbConnection"
 	"github.com/Densuke-fitness/GoDojoTechTrain/model"
-	"github.com/Densuke-fitness/GoDojoTechTrain/repository"
 )
 
 func SelectLotteryRateList() (LotteryRateList []float64, err error) {
@@ -13,13 +12,6 @@ func SelectLotteryRateList() (LotteryRateList []float64, err error) {
 	dbConn := dbConnection.GetInstance()
 
 	db := dbConn.GetConnection()
-
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
-
-	defer repository.CommitOrRollBack(tx, err)
 
 	const sql = (`
 		SELECT lottery_rate 
@@ -62,13 +54,6 @@ func RandSelectCharacterByRate(rate float64) (character model.Character, err err
 
 	db := dbConn.GetConnection()
 
-	tx, err := db.Begin()
-	if err != nil {
-		return
-	}
-
-	defer repository.CommitOrRollBack(tx, err)
-
 	//Execute select to get the sequence
 	const sql = (`
 		SELECT T1.name, T2.character_id 
@@ -78,7 +63,7 @@ func RandSelectCharacterByRate(rate float64) (character model.Character, err err
 		WHERE CAST(T2.lottery_rate AS CHAR) = ?
 		ORDER BY RAND() LIMIT 1
 	`)
-	row := tx.QueryRow(sql, rate)
+	row := db.QueryRow(sql, rate)
 
 	if err = row.Scan(&character.Name, &character.Id); err != nil {
 		return
