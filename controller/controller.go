@@ -75,18 +75,29 @@ func GetUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
-		userId, err := tokenService.ExtractUserIdFromToken(token)
+		decodedtoken, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
-				StatusCode: http.StatusBadRequest,
-				Message:    "Invalid token",
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
 		}
 
-		name, err := users.GetUser(userId)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		if userId == nil {
+			params := view.ErrorViewParams{
+				Error:      nil,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error Invaild token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		name, err := users.GetUser(userId.(int))
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -118,12 +129,12 @@ func UpdateUser() http.HandlerFunc {
 
 		//fetch token and extract userid
 		token := req.Header.Get("X-Auth-Token")
-		userId, err := tokenService.ExtractUserIdFromToken(token)
+		decodedtoken, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
-				StatusCode: http.StatusBadRequest,
-				Message:    "Invalid token",
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -143,7 +154,18 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 
-		err = users.UpdateUser(reqParams.Name, userId)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		if userId == nil {
+			params := view.ErrorViewParams{
+				Error:      nil,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error Invaild token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		err = users.UpdateUser(reqParams.Name, userId.(int))
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -183,22 +205,32 @@ func DrawGacha() http.HandlerFunc {
 			view.ErrorView(resp, params)
 			return
 		}
-		
 
 		//fetch token and extract userid
 		token := req.Header.Get("X-Auth-Token")
-		userId, err := tokenService.ExtractUserIdFromToken(token)
+		decodedtoken, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
-				StatusCode: http.StatusBadRequest,
-				Message:    "Invalid token",
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
 		}
 
-		gachaResults, err := gacha.DrawGacha(reqParams.Times, userId)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		if userId == nil {
+			params := view.ErrorViewParams{
+				Error:      nil,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error Invaild token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		gachaResults, err := gacha.DrawGacha(reqParams.Times, userId.(int))
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -239,18 +271,29 @@ func GetCharacterList() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
-		userId, err := tokenService.ExtractUserIdFromToken(token)
+		decodedtoken, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
-				StatusCode: http.StatusBadRequest,
-				Message:    "Invalid token",
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
 		}
 
-		characters, err := character.GetCharacterList(userId)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		if userId == nil {
+			params := view.ErrorViewParams{
+				Error:      nil,
+				StatusCode: http.StatusInternalServerError,
+				Message:    "Error Invaild token",
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		characters, err := character.GetCharacterList(userId.(int))
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
