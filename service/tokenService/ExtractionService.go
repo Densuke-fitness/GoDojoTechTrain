@@ -1,25 +1,22 @@
 package tokenService
 
 import (
-	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService/auth"
+	"github.com/dgrijalva/jwt-go"
 	logger "github.com/sirupsen/logrus"
 )
 
-func ExtractUserIdFromToken(token string) (int, error) {
-	decodedtoken, err := auth.DecodeToken(token)
-	if err != nil {
-		logger.Errorf("Error auth.DecodeToken: %s", err)
-		// Used -1 , not 0 beacuse of using -1 in model/auth/repository.go
-		return -1, err
+func ExtractFieldFromToken(FieldName string, decodedtoken jwt.MapClaims) interface{} {
+
+	if FieldName == USER_ID {
+		if decodedtoken[FieldName] == nil {
+			logger.Warnf("Error decodedtoken['%s']: %s", FieldName, decodedtoken[FieldName])
+			return nil
+		}
+
+		// extract userid
+		userId := int(decodedtoken[FieldName].(float64))
+		return userId
 	}
 
-	if decodedtoken[USER_ID] == nil {
-		logger.Warnf("Error decodedtoken['%s']: %s", USER_ID, err)
-		return -1, err
-	}
-
-	// extract userid
-	userId := int(decodedtoken[USER_ID].(float64))
-
-	return userId, nil
+	return nil
 }
