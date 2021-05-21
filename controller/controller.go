@@ -86,7 +86,7 @@ func GetUser() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
 			params := view.ErrorViewParams{
 				Error:      nil,
@@ -154,7 +154,7 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
 			params := view.ErrorViewParams{
 				Error:      nil,
@@ -219,7 +219,7 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
 			params := view.ErrorViewParams{
 				Error:      nil,
@@ -282,7 +282,7 @@ func GetCharacterList() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, decodedtoken)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
 			params := view.ErrorViewParams{
 				Error:      nil,
