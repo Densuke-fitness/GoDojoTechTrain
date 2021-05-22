@@ -10,10 +10,24 @@ import (
 func ErrorView(resp http.ResponseWriter, params ErrorViewParams) {
 	resp.Header().Set("Content-type", "application/json")
 
-	logger.Errorf("Error : %s", params.Error)
+	errMsg := generateError(params.StatusCode)
+	logger.Errorf("%s : %s", errMsg, params.Error)
 	resp.WriteHeader(params.StatusCode)
-	resp.Write([]byte(fmt.Sprintf(`"error": "%s"`, params.Message))) //nolint
+	resp.Write([]byte(fmt.Sprintf(`"error": "%s"`, errMsg))) //nolint
+}
 
+func generateError(StatusCode int) (errMsg string) {
+
+	switch StatusCode {
+	case http.StatusInternalServerError:
+		errMsg = "IntervalServerError"
+	case http.StatusBadRequest:
+		errMsg = "StatusBadRequest"
+	default:
+		errMsg = "GeneralError"
+	}
+
+	return
 }
 
 type ErrorViewParams struct {

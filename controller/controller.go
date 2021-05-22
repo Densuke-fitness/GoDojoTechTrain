@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -25,7 +26,6 @@ func CreateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusBadRequest,
-				Message:    "Error unmarshalling the request",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -37,7 +37,6 @@ func CreateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error executing model process",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -48,7 +47,6 @@ func CreateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error creating token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -61,7 +59,6 @@ func CreateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error marshalling data",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -80,7 +77,6 @@ func GetUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -88,10 +84,10 @@ func GetUser() http.HandlerFunc {
 
 		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
+			err = fmt.Errorf("%s", "The value of times must be at least 1.")
 			params := view.ErrorViewParams{
-				Error:      nil,
+				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error Invaild token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -102,7 +98,6 @@ func GetUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error executing model process",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -114,7 +109,6 @@ func GetUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error marshalling data",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -134,7 +128,6 @@ func UpdateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -148,7 +141,6 @@ func UpdateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error unmarshalling the request",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -156,10 +148,10 @@ func UpdateUser() http.HandlerFunc {
 
 		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
+			err = fmt.Errorf("%s", "The value of times must be at least 1.")
 			params := view.ErrorViewParams{
-				Error:      nil,
+				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error Invaild token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -170,7 +162,6 @@ func UpdateUser() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error executing model process",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -190,17 +181,16 @@ func DrawGacha() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error unmarshalling the request",
 			}
 			view.ErrorView(resp, params)
 			return
 		}
 
 		if reqParams.Times <= 0 {
+			err = fmt.Errorf("%s", "The value of times must be at least 1.")
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusBadRequest,
-				Message:    "The value of times must be at least 1.",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -213,7 +203,6 @@ func DrawGacha() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -221,10 +210,10 @@ func DrawGacha() http.HandlerFunc {
 
 		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
+			err = fmt.Errorf("%s", "userId　Not　Found")
 			params := view.ErrorViewParams{
-				Error:      nil,
+				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error Invaild token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -235,7 +224,6 @@ func DrawGacha() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error executing model process",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -257,7 +245,6 @@ func DrawGacha() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error marshalling data",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -276,7 +263,6 @@ func GetCharacterList() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error decoding token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -284,10 +270,10 @@ func GetCharacterList() http.HandlerFunc {
 
 		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
 		if userId == nil {
+			err = fmt.Errorf("%s", "userId　Not　Found")
 			params := view.ErrorViewParams{
-				Error:      nil,
+				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error Invaild token",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -298,7 +284,6 @@ func GetCharacterList() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error executing model process",
 			}
 			view.ErrorView(resp, params)
 			return
@@ -321,7 +306,6 @@ func GetCharacterList() http.HandlerFunc {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
-				Message:    "Error marshalling data",
 			}
 			view.ErrorView(resp, params)
 			return
