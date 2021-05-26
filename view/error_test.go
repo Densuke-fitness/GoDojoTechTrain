@@ -13,7 +13,6 @@ func TestErrorView(t *testing.T) {
 	testParams := ErrorViewParams{
 		nil,
 		http.StatusInternalServerError,
-		"test",
 	}
 
 	w := httptest.NewRecorder()
@@ -30,7 +29,7 @@ func TestErrorView(t *testing.T) {
 		t.Fatal("unexpected error")
 	}
 
-	expected := fmt.Sprintf(`"error": "%s"`, testParams.Message)
+	expected := fmt.Sprintf(`"error": "%s"`, "IntervalServerError")
 	if string(got) != expected {
 		t.Errorf(`Error DecodeToken: %v but want %q`, got, expected)
 	}

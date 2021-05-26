@@ -16,22 +16,19 @@ func ErrorView(resp http.ResponseWriter, params ErrorViewParams) {
 	resp.Write([]byte(fmt.Sprintf(`"error": "%s"`, errMsg))) //nolint
 }
 
-func generateError(StatusCode int) (errMsg string) {
+func generateError(StatusCode int) string {
 
 	switch StatusCode {
 	case http.StatusInternalServerError:
-		errMsg = "IntervalServerError"
+		return "IntervalServerError"
 	case http.StatusBadRequest:
-		errMsg = "StatusBadRequest"
+		return "StatusBadRequest"
 	default:
-		errMsg = "GeneralError"
+		return "GeneralError"
 	}
-
-	return
 }
 
 type ErrorViewParams struct {
 	Error      error
 	StatusCode int
-	Message    string
 }
