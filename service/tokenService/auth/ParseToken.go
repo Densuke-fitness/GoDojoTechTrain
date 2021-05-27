@@ -1,19 +1,36 @@
 package auth
 
 import (
+	"fmt"
+
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService"
 	logger "github.com/sirupsen/logrus"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-func DecodeToken(token string) (jwt.MapClaims, error) {
+type UserClaims struct {
+	UserId int
+}
+
+func DecodeToken(token string) (*UserClaims, error) {
 
 	t, err := parseToken(token)
 	if err != nil {
 		logger.Errorf("Error implementing parseToken: %s", err)
 		return nil, err
 	}
-	return t.Claims.(jwt.MapClaims), nil
+
+	mapClaims := t.Claims.(jwt.MapClaims)
+
+	userClaims := convertToUserClaims(mapClaims)
+	if userClaims == nil {
+		err = fmt.Errorf("%s", "including invalid fields")
+		logger.Errorf("Error implementing convertToUserClaims: %s", err)
+		return nil, err
+	}
+
+	return userClaims, nil
 }
 
 func parseToken(token string) (*jwt.Token, error) {
@@ -26,4 +43,19 @@ func parseToken(token string) (*jwt.Token, error) {
 		return t, err
 	}
 	return t, nil
+}
+
+func convertToUserClaims(mapClaims jwt.MapClaims) *UserClaims {
+
+	var userClaims UserClaims
+
+	//userId
+	if mapClaims[tokenService.USER_ID] == nil {
+		logger.Warnf("Error  mapClaims['%s']: %s", tokenService.USER_ID, mapClaims[tokenService.USER_ID])
+		return nil
+	}
+	userId := int(mapClaims[tokenService.USER_ID].(float64))
+	userClaims.UserId = userId
+
+	return &userClaims
 }

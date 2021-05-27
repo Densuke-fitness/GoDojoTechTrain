@@ -72,7 +72,7 @@ func GetUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
-		decodedtoken, err := auth.DecodeToken(token)
+		userClaims, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -82,7 +82,7 @@ func GetUser() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
+		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, userClaims)
 		if userId == nil {
 			err = fmt.Errorf("%s", "The value of times must be at least 1.")
 			params := view.ErrorViewParams{
@@ -123,7 +123,7 @@ func UpdateUser() http.HandlerFunc {
 
 		//fetch token and extract userid
 		token := req.Header.Get("X-Auth-Token")
-		decodedtoken, err := auth.DecodeToken(token)
+		userClaims, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -146,18 +146,7 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
-		if userId == nil {
-			err = fmt.Errorf("%s", "The value of times must be at least 1.")
-			params := view.ErrorViewParams{
-				Error:      err,
-				StatusCode: http.StatusInternalServerError,
-			}
-			view.ErrorView(resp, params)
-			return
-		}
-
-		err = users.UpdateUser(reqParams.Name, userId.(int))
+		err = users.UpdateUser(reqParams.Name, userClaims.UserId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -198,7 +187,7 @@ func DrawGacha() http.HandlerFunc {
 
 		//fetch token and extract userid
 		token := req.Header.Get("X-Auth-Token")
-		decodedtoken, err := auth.DecodeToken(token)
+		userClaims, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -208,18 +197,7 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
-		if userId == nil {
-			err = fmt.Errorf("%s", "userId　Not　Found")
-			params := view.ErrorViewParams{
-				Error:      err,
-				StatusCode: http.StatusInternalServerError,
-			}
-			view.ErrorView(resp, params)
-			return
-		}
-
-		gachaResults, err := gacha.DrawGacha(reqParams.Times, userId.(int))
+		gachaResults, err := gacha.DrawGacha(reqParams.Times, userClaims.UserId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -258,7 +236,7 @@ func GetCharacterList() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
 		token := req.Header.Get("X-Auth-Token")
-		decodedtoken, err := auth.DecodeToken(token)
+		userClaims, err := auth.DecodeToken(token)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -268,18 +246,7 @@ func GetCharacterList() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, decodedtoken)
-		if userId == nil {
-			err = fmt.Errorf("%s", "userId　Not　Found")
-			params := view.ErrorViewParams{
-				Error:      err,
-				StatusCode: http.StatusInternalServerError,
-			}
-			view.ErrorView(resp, params)
-			return
-		}
-
-		characters, err := character.GetCharacterList(userId.(int))
+		characters, err := character.GetCharacterList(userClaims.UserId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
