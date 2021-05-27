@@ -8,7 +8,6 @@ import (
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/character"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/gacha"
-	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService/auth"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/users"
 	"github.com/Densuke-fitness/GoDojoTechTrain/view"
@@ -82,18 +81,7 @@ func GetUser() http.HandlerFunc {
 			return
 		}
 
-		userId := tokenService.ExtractFieldFromToken(tokenService.USER_ID, tokenService.TYPE_INT, userClaims)
-		if userId == nil {
-			err = fmt.Errorf("%s", "The value of times must be at least 1.")
-			params := view.ErrorViewParams{
-				Error:      err,
-				StatusCode: http.StatusInternalServerError,
-			}
-			view.ErrorView(resp, params)
-			return
-		}
-
-		name, err := users.GetUser(userId.(int))
+		name, err := users.GetUser(userClaims.UserId)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
