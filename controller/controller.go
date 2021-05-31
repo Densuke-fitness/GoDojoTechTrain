@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/character"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/gacha"
@@ -28,6 +29,31 @@ func CreateUser() http.HandlerFunc {
 			}
 			view.ErrorView(resp, params)
 			return
+		}
+
+		//varify space
+		slice := strings.Split(reqParams.Name, "")
+		len := len(slice)
+		if len <= 0 {
+			err = fmt.Errorf("%s", "Filled in with 0 characters.")
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		for i := 0; i < len; i++ {
+			if slice[i] == " " || slice[i] == "　" {
+				err = fmt.Errorf("%s", "Included space string")
+				params := view.ErrorViewParams{
+					Error:      err,
+					StatusCode: http.StatusBadRequest,
+				}
+				view.ErrorView(resp, params)
+				return
+			}
 		}
 
 		// Passing values to the model and executing the process
