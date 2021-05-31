@@ -3,6 +3,8 @@ package users
 import (
 	"fmt"
 	"testing"
+
+	"github.com/Densuke-fitness/GoDojoTechTrain/service/tokenService/auth"
 )
 
 func TestUsers(t *testing.T) {
@@ -13,11 +15,6 @@ func TestUsers(t *testing.T) {
 		name string
 	}{
 		{id: 1, name: "a"},
-		{id: 2, name: "ab"},
-		{id: 3, name: "AA"},
-		{id: 4, name: "あいうう"},
-		{id: 5, name: "123"},
-		{id: 6, name: "１２３"},
 	}
 
 	for _, tt := range tests {
@@ -25,13 +22,22 @@ func TestUsers(t *testing.T) {
 
 		t.Run(testName, func(t *testing.T) {
 			//test CreateUser
-			gotToken, err := CreateUser(tt.name)
+			userId, err := CreateUser(tt.name)
 			if err != nil {
 				t.Errorf("Error implementing CreateUser: %s", err.Error())
 			}
+			gotToken, err := auth.CreateToken(userId)
+			if err != nil {
+				t.Errorf("Error implementing auth.CreateToken: %s", err.Error())
+			}
 
 			//test GetUser
-			gotName, err := GetUser(gotToken)
+			userClaims, err := auth.DecodeToken(gotToken)
+			if err != nil {
+				t.Errorf("Error implementing auth.DecodeToken: %s", err.Error())
+			}
+
+			gotName, err := GetUser(userClaims.UserId)
 			if err != nil {
 				t.Errorf("Error implementing GetUser: %s", err.Error())
 			}
@@ -40,7 +46,7 @@ func TestUsers(t *testing.T) {
 			}
 
 			//test UpdateUser
-			err = UpdateUser(gotName, gotToken)
+			err = UpdateUser(gotName, userClaims.UserId)
 			if err != nil {
 				t.Errorf("Error implementing UpdateUser: %s", err.Error())
 			}
