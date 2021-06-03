@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+
 	var router = mux.NewRouter()
 	const port string = ":8080"
 	defer dbConnection.GetInstance().Close()
