@@ -28,7 +28,7 @@ func TestAuth(t *testing.T) {
 			if err != nil {
 				t.Errorf("Error implementing DecodeToken: %s", err.Error())
 			}
-			gotUserId := int(got["user_id"].(float64))
+			gotUserId := got.UserId
 			if gotUserId != tt.want {
 				t.Errorf(`Error DecodeToken: %v but want %q`, gotUserId, tt.want)
 			}
