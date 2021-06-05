@@ -9,7 +9,7 @@ import (
 
 func TestSuccessView(t *testing.T) {
 
-	//testing ErrorView
+	//TODO: テストケースをそれぞれのAPIの成功ケースについて実装するかどうか議論する
 	b := []byte("test")
 	w := httptest.NewRecorder()
 	SuccessView(w, b)
