@@ -1,56 +1,59 @@
 package character
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/Densuke-fitness/GoDojoTechTrain/model"
+	"github.com/Densuke-fitness/GoDojoTechTrain/repository/gacha"
+	"github.com/Densuke-fitness/GoDojoTechTrain/repository/users"
 )
 
-func TestInsert(t *testing.T) {
+func TestCharacterRepository(t *testing.T) {
 
-	t.Skip("TODO: not implemented")
-	// tests := []struct {
-	// 	id          int
-	// 	name        string
-	// 	characterId int
-	// }{
-	// 	{id: 1, characterId: 1},
-	// 	{id: 2, characterId: 2},
-	// 	{id: 3, characterId: 2},
-	// }
+	tests := []struct {
+		id          int
+		characterId int
+	}{
+		{id: 1, characterId: 1},
+		{id: 2, characterId: 2},
+		{id: 3, characterId: 2},
+	}
 
-	// testUserModelFromView := model.User{Name: "testUser"}
+	testUserModelFromView := model.User{Name: "testUser"}
+	//ユーザーの作成
+	user, _ := users.Insert(testUserModelFromView)
 
-	// user, _ := users.Insert(testUserModelFromView)
+	for _, tt := range tests {
+		testName := fmt.Sprintf("number:%v", tt.id)
 
-	// for _, tt := range tests {
-	// 	testName := fmt.Sprintf("number:%v", tt.id)
+		t.Run(testName, func(t *testing.T) {
 
-	// 	t.Run(testName, func(t *testing.T) {
-	// 		//test Insert
+			testRate := 0.1
+			testGachaResult, _ := gacha.RandSelectCharacterByRate(testRate)
 
-	// 		err := Insert(user)
-	// 		if err != nil {
-	// 			t.Errorf("Error implementing Insert: %s", err.Error())
-	// 		}
-	// 	})
-	// }
-}
+			//test: SelectMaxSeqNum
+			maxSeq, err := SelectMaxSeqNum(*user, testGachaResult)
+			if err != nil {
+				t.Errorf("Error implementing SelectMaxSeqNum: %s", err.Error())
+			}
 
-func TestSelectMaxSeqNum(t *testing.T) {
-	t.Skip("TODO: not implemented")
-}
+			//test: Insert
+			maxSeq += 1
+			testGachaResult.CharacterSeq = maxSeq
 
-func TestSelectCharactersByUserId(t *testing.T) {
-	t.Skip("TODO: not implemented")
+			err = Insert(*user, testGachaResult)
+			if err != nil {
+				t.Errorf("Error implementing Insert: %s", err.Error())
+			}
 
-	// testUser := "testUser"
-	// testUserId, _ := users.Insert(testUser)
+			//test: SelectCharactersByUserId
+			gotCharacters, err := SelectCharactersByUserId(*user)
+			if err != nil {
+				t.Errorf("Error implementing SelectCharactersByUserId: %s", err.Error())
+			}
+			fmt.Println(gotCharacters)
 
-	// testCharacterId := 1
-	// _ = gacha.Insert(testUserId, testCharacterId)
-
-	// gotCharacters, err := SelectCharactersByUserId(testUserId)
-	// if err != nil {
-	// 	t.Errorf("Error SelectCharactersById: %s", err.Error())
-	// }
-	// fmt.Println(gotCharacters)
+		})
+	}
 }
