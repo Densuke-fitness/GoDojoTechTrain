@@ -2,13 +2,11 @@ package gacha
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
-
-	"github.com/Densuke-fitness/GoDojoTechTrain/service/gacha"
 )
 
-func TestGachaRepository(t *testing.T) {
+func TestSelectLotteryRateList(t *testing.T) {
+	t.Skip()
 
 	//test :SelectLotteryRateList
 	testLotteryRateList, err := SelectLotteryRateList()
@@ -16,10 +14,12 @@ func TestGachaRepository(t *testing.T) {
 		t.Errorf("Error implementing SelectLotteryRateList: %s", err.Error())
 	}
 	fmt.Println(testLotteryRateList)
+}
 
-	//test :RandSelectCharacterByRate
-	testUserRandNum := rand.Float64()
-	testRate := gacha.RandChooseLotteryRate(testUserRandNum, testLotteryRateList)
+func TestRandSelectCharacterByRate(t *testing.T) {
+
+	//test :RandSelectCharacterByRate: 循環参照が起こるため値を設定
+	testRate := 0.1
 
 	gachaResult, err := RandSelectCharacterByRate(testRate)
 	if err != nil {
