@@ -10,11 +10,6 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
-// type GachaResult struct {
-// 	CharacterId string `json:"characterID"`
-// 	Name        string `json:"name"`
-// }
-
 func DrawGacha(times int, userId int) ([]model.Character, error) {
 
 	userModelFromView := model.User{Id: userId}
@@ -30,7 +25,7 @@ func DrawGacha(times int, userId int) ([]model.Character, error) {
 	for i := 1; i <= times; i++ {
 		//the user draws randomly
 		userRandNum := rand.Float64()
-		rate := randChooseLotteryRate(userRandNum, LotteryRateList)
+		rate := RandChooseLotteryRate(userRandNum, LotteryRateList)
 		gachaResult, err := gacha.RandSelectCharacterByRate(rate)
 		if err != nil {
 			logger.Errorf("Error RandSelectCharacterByRate: %s", err)
@@ -57,7 +52,7 @@ func DrawGacha(times int, userId int) ([]model.Character, error) {
 	return gachaResults, err
 }
 
-func randChooseLotteryRate(userRandNum float64, LotteryRateList []float64) float64 {
+func RandChooseLotteryRate(userRandNum float64, LotteryRateList []float64) float64 {
 
 	applicableBoundaryVal := 0.0
 
