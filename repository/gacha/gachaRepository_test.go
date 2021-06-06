@@ -6,7 +6,6 @@ import (
 )
 
 func TestSelectLotteryRateList(t *testing.T) {
-	t.Skip()
 
 	//test :SelectLotteryRateList
 	testLotteryRateList, err := SelectLotteryRateList()
