@@ -37,4 +37,5 @@ func TestRandChooseLotteryRate(t *testing.T) {
 	if rate <= 0 || 1 <= rate {
 		t.Error("Error RandChooseLotteryRate")
 	}
+	fmt.Println(rate)
 }
