@@ -9,7 +9,7 @@ import (
 
 func TestRepository(t *testing.T) {
 
-	//a userId
+	//user_test.goでテストケースを1つにしているためこちらも同様に設定
 	tests := []struct {
 		id      int
 		userId  int

@@ -19,11 +19,11 @@ func TestDrawGacha(t *testing.T) {
 	//TODO: 数値について議論するなら仕様を決める必要がある
 	const testTimes = 10
 
-	GachaResults, err := DrawGacha(testTimes, gotToken)
+	gachaResults, err := DrawGacha(testTimes, gotToken)
 	if err != nil {
 		t.Errorf("Error DrawGacha: %s", err.Error())
 	}
-	fmt.Println(GachaResults)
+	fmt.Println(gachaResults)
 }
 
 func TestRandChooseLotteryRate(t *testing.T) {

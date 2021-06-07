@@ -16,7 +16,7 @@ func TestCharacterRepository(t *testing.T) {
 		characterId int
 	}{
 		{id: 1, characterId: 1},
-		{id: 2, characterId: 2},
+		{id: 2, characterId: 1},
 		{id: 3, characterId: 2},
 	}
 
@@ -25,9 +25,15 @@ func TestCharacterRepository(t *testing.T) {
 	user, _ := users.Insert(testUserModelFromView)
 
 	for _, tt := range tests {
+		//ParallelTest
+		tt := tt
+
 		testName := fmt.Sprintf("number:%v", tt.id)
 
 		t.Run(testName, func(t *testing.T) {
+
+			//ParallelTest
+			t.Parallel()
 
 			testRate := 0.1
 			testGachaResult, _ := gacha.RandSelectCharacterByRate(testRate)

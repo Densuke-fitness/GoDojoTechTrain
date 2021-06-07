@@ -13,6 +13,7 @@ func TestCharacter(t *testing.T) {
 	const testUser = "testUser"
 	gotToken, _ := users.CreateUser(testUser)
 
+	//gacha_testにて設定を10にしているためこちらも同様に設定
 	const testTimes = 10
 	_, _ = gacha.DrawGacha(testTimes, gotToken)
 
