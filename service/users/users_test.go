@@ -9,7 +9,7 @@ import (
 
 func TestUsers(t *testing.T) {
 
-	//a userId
+	//同値クラスの関係でテストケースを1つにしている:異常系はcontrallerでバリデートしている
 	tests := []struct {
 		id   int
 		name string

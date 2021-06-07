@@ -30,9 +30,16 @@ func TestErrorView(t *testing.T) {
 	}}
 
 	for _, tt := range tests {
+		//ParallelTest
+		tt := tt
+
 		testName := fmt.Sprintf("number:%v", tt.id)
 
 		t.Run(testName, func(t *testing.T) {
+
+			//ParallelTest
+			t.Parallel()
+
 			//test CreateUser
 			w := httptest.NewRecorder()
 			ErrorView(w, tt.testParams)
