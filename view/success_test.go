@@ -27,7 +27,7 @@ func TestSuccessView(t *testing.T) {
 
 	const expected = "test"
 	if string(got) != expected {
-		t.Errorf(`Error DecodeToken: %v but want %q`, got, expected)
+		t.Errorf(`Error SuccessView: %v but want %q`, got, expected)
 	}
 
 }

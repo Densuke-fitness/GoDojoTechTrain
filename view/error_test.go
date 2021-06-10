@@ -12,21 +12,21 @@ func TestErrorView(t *testing.T) {
 
 	//errorPattern
 	tests := []struct {
-		id              int
-		testParams      ErrorViewParams
-		wantedErrorCode string
+		id          int
+		testParams  ErrorViewParams
+		wantedError []byte
 	}{{
-		id:              1,
-		testParams:      ErrorViewParams{nil, http.StatusInternalServerError},
-		wantedErrorCode: "IntervalServerError",
+		id:          1,
+		testParams:  ErrorViewParams{nil, http.StatusInternalServerError},
+		wantedError: []byte(`"error": "IntervalServerError"`),
 	}, {
-		id:              2,
-		testParams:      ErrorViewParams{nil, http.StatusBadRequest},
-		wantedErrorCode: "StatusBadRequest",
+		id:          2,
+		testParams:  ErrorViewParams{nil, http.StatusBadRequest},
+		wantedError: []byte(`"error": "StatusBadRequest"`),
 	}, {
-		id:              3,
-		testParams:      ErrorViewParams{nil, http.StatusBadGateway},
-		wantedErrorCode: "GeneralError",
+		id:          3,
+		testParams:  ErrorViewParams{nil, http.StatusBadGateway},
+		wantedError: []byte(`"error": "GeneralError"`),
 	}}
 
 	for _, tt := range tests {
@@ -40,7 +40,7 @@ func TestErrorView(t *testing.T) {
 			//ParallelTest
 			t.Parallel()
 
-			//test CreateUser
+			//test :ErrorView
 			w := httptest.NewRecorder()
 			ErrorView(w, tt.testParams)
 
@@ -55,8 +55,8 @@ func TestErrorView(t *testing.T) {
 				t.Fatal("unexpected error")
 			}
 
-			expected := fmt.Sprintf(`"error": "%s"`, tt.wantedErrorCode)
-			if string(got) != expected {
+			//Converted to string because byte array is not comparable
+			if string(got) != string(tt.wantedError) {
 				t.Error()
 			}
 		})
