@@ -12,26 +12,31 @@ func TestErrorView(t *testing.T) {
 
 	//errorPattern
 	tests := []struct {
-		id          int
-		testParams  ErrorViewParams
-		wantedError []byte
+		id             int
+		testStatusCode int
+		wantedError    []byte
 	}{{
-		id:          1,
-		testParams:  ErrorViewParams{nil, http.StatusInternalServerError},
-		wantedError: []byte(`"error": "IntervalServerError"`),
+		id:             1,
+		testStatusCode: http.StatusInternalServerError,
+		wantedError:    []byte(`"error": "IntervalServerError"`),
 	}, {
-		id:          2,
-		testParams:  ErrorViewParams{nil, http.StatusBadRequest},
-		wantedError: []byte(`"error": "StatusBadRequest"`),
+		id:             2,
+		testStatusCode: http.StatusBadRequest,
+		wantedError:    []byte(`"error": "StatusBadRequest"`),
 	}, {
-		id:          3,
-		testParams:  ErrorViewParams{nil, http.StatusBadGateway},
-		wantedError: []byte(`"error": "GeneralError"`),
+		id:             3,
+		testStatusCode: http.StatusBadGateway,
+		wantedError:    []byte(`"error": "GeneralError"`),
 	}}
 
 	for _, tt := range tests {
 		//ParallelTest
 		tt := tt
+
+		//Define an anonymous helper function
+		testParams := func(StatusCode int) ErrorViewParams {
+			return ErrorViewParams{nil, StatusCode}
+		}(tt.testStatusCode)
 
 		testName := fmt.Sprintf("number:%v", tt.id)
 
@@ -42,11 +47,11 @@ func TestErrorView(t *testing.T) {
 
 			//test :ErrorView
 			w := httptest.NewRecorder()
-			ErrorView(w, tt.testParams)
+			ErrorView(w, testParams)
 
 			rw := w.Result()
 
-			if rw.StatusCode != tt.testParams.StatusCode {
+			if rw.StatusCode != testParams.StatusCode {
 				t.Fatal("unexpected status code")
 			}
 
