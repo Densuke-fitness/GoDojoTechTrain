@@ -12,24 +12,24 @@ func TestErrorView(t *testing.T) {
 
 	//errorPattern
 	tests := []struct {
-		id             int
+		description    string
 		testStatusCode int
 		wantedError    []byte
 	}{{
-		id:             1,
+		description:    "Test IntervalServerError",
 		testStatusCode: http.StatusInternalServerError,
 		wantedError:    []byte(`"error": "IntervalServerError"`),
 	}, {
-		id:             2,
+		description:    "Test IntervalServerError",
 		testStatusCode: http.StatusBadRequest,
 		wantedError:    []byte(`"error": "StatusBadRequest"`),
 	}, {
-		id:             3,
+		description:    "Test GeneralError",
 		testStatusCode: http.StatusBadGateway,
 		wantedError:    []byte(`"error": "GeneralError"`),
 	}}
 
-	for _, tt := range tests {
+	for id, tt := range tests {
 		//ParallelTest
 		tt := tt
 
@@ -38,9 +38,9 @@ func TestErrorView(t *testing.T) {
 			return ErrorViewParams{nil, StatusCode}
 		}(tt.testStatusCode)
 
-		testName := fmt.Sprintf("number:%v", tt.id)
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
 
-		t.Run(testName, func(t *testing.T) {
+		t.Run(testCaseName, func(t *testing.T) {
 
 			//ParallelTest
 			t.Parallel()

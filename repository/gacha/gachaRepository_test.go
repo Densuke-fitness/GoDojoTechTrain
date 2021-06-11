@@ -18,12 +18,39 @@ func TestSelectLotteryRateList(t *testing.T) {
 func TestRandSelectCharacterByRate(t *testing.T) {
 
 	//test :RandSelectCharacterByRate: 循環参照が起こるため値を設定
-	testRate := 0.1
-
-	gachaResult, err := RandSelectCharacterByRate(testRate)
-	if err != nil {
-		t.Errorf("Error implementing SelectLotteryRateList: %s", err.Error())
+	tests := []struct {
+		description string
+		testRate    float64
+		wantErr     bool
+	}{
+		//normal case
+		{description: "Test Normal Case", testRate: 0.1, wantErr: false},
+		//abnormal case
+		{description: "Test Abnormal Case", testRate: 0.6, wantErr: true},
 	}
-	fmt.Println(gachaResult)
 
+	for id, tt := range tests {
+
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
+
+		t.Run(testCaseName, func(t *testing.T) {
+
+			gachaResult, err := RandSelectCharacterByRate(tt.testRate)
+
+			//test abnormal case
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("Error implementing SelectLotteryRateList: %s", "Abnormal Case")
+				}
+			} else {
+
+				//test normal case
+				if err != nil {
+					t.Errorf("Error implementing SelectLotteryRateList: %s", err.Error())
+				}
+
+				fmt.Println(gachaResult)
+			}
+		})
+	}
 }

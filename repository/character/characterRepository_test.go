@@ -12,31 +12,30 @@ import (
 func TestCharacterRepository(t *testing.T) {
 
 	tests := []struct {
-		id          int
-		characterId int
+		description string
+		testRate    float64
 	}{
-		{id: 1, characterId: 1},
-		{id: 2, characterId: 1},
-		{id: 3, characterId: 2},
+		{description: "Test the operation of the character repo process .", testRate: 0.1},
+		{description: "Test if characterId is unique .", testRate: 0.1},
+		{description: "Test to see if you can get a new kind of character.", testRate: 0.3},
 	}
 
 	testUserModelFromView := model.User{Name: "testUser"}
 	//ユーザーの作成
 	user, _ := users.Insert(testUserModelFromView)
 
-	for _, tt := range tests {
+	for id, tt := range tests {
 		//ParallelTest
 		tt := tt
 
-		testName := fmt.Sprintf("number:%v", tt.id)
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
 
-		t.Run(testName, func(t *testing.T) {
+		t.Run(testCaseName, func(t *testing.T) {
 
 			//ParallelTest
 			t.Parallel()
 
-			testRate := 0.1
-			testGachaResult, _ := gacha.RandSelectCharacterByRate(testRate)
+			testGachaResult, _ := gacha.RandSelectCharacterByRate(tt.testRate)
 
 			//test: SelectMaxSeqNum
 			maxSeq, err := SelectMaxSeqNum(*user, testGachaResult)
