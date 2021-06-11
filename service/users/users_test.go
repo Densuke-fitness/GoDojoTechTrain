@@ -11,18 +11,18 @@ func TestUsers(t *testing.T) {
 
 	//同値クラスの関係でテストケースを1つにしている:異常系はcontrallerでバリデートしている
 	tests := []struct {
-		id   int
-		name string
+		description  string
+		testUserName string
 	}{
-		{id: 1, name: "a"},
+		{description: "Test a series of API processes related to Users.", testUserName: "a"},
 	}
 
-	for _, tt := range tests {
-		testName := fmt.Sprintf("number:%v", tt.id)
+	for id, tt := range tests {
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
 
-		t.Run(testName, func(t *testing.T) {
+		t.Run(testCaseName, func(t *testing.T) {
 			//test CreateUser
-			userId, err := CreateUser(tt.name)
+			userId, err := CreateUser(tt.testUserName)
 			if err != nil {
 				t.Errorf("Error implementing CreateUser: %s", err.Error())
 			}
@@ -37,16 +37,16 @@ func TestUsers(t *testing.T) {
 				t.Errorf("Error implementing auth.DecodeToken: %s", err.Error())
 			}
 
-			gotName, err := GetUser(userClaims.UserId)
+			gotUserName, err := GetUser(userClaims.UserId)
 			if err != nil {
 				t.Errorf("Error implementing GetUser: %s", err.Error())
 			}
-			if gotName != tt.name {
+			if gotUserName != tt.testUserName {
 				t.Errorf("Error implementing GetUser: %s", err.Error())
 			}
 
 			//test UpdateUser
-			err = UpdateUser(gotName, userClaims.UserId)
+			err = UpdateUser(gotUserName, userClaims.UserId)
 			if err != nil {
 				t.Errorf("Error implementing UpdateUser: %s", err.Error())
 			}

@@ -11,19 +11,32 @@ import (
 
 func TestDrawGacha(t *testing.T) {
 
-	//test CreateUser
-	const testUser = "testUser"
-	gotToken, _ := users.CreateUser(testUser)
-
-	//テストケース: 同値クラステスト(数値は一旦10を採用)
-	//TODO: 数値について議論するなら仕様を決める必要がある
-	const testTimes = 10
-
-	gachaResults, err := DrawGacha(testTimes, gotToken)
-	if err != nil {
-		t.Errorf("Error DrawGacha: %s", err.Error())
+	tests := []struct {
+		description  string
+		testUserName string
+		testTimes    int
+	}{
+		{description: "Test a series of API processes related to Users.", testUserName: "a"},
 	}
-	fmt.Println(gachaResults)
+
+	for id, tt := range tests {
+
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
+
+		t.Run(testCaseName, func(t *testing.T) {
+
+			gotToken, _ := users.CreateUser(tt.testUserName)
+
+			//テストケース: 同値クラステスト(数値は一旦10を採用)
+			//TODO: 数値について議論するなら仕様を決める必要がある
+			gachaResults, err := DrawGacha(tt.testTimes, gotToken)
+			if err != nil {
+				t.Errorf("Error DrawGacha: %s", err.Error())
+			}
+			fmt.Println(gachaResults)
+
+		})
+	}
 }
 
 func TestRandChooseLotteryRate(t *testing.T) {

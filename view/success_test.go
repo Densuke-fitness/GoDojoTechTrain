@@ -1,6 +1,7 @@
 package view
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -9,25 +10,42 @@ import (
 
 func TestSuccessView(t *testing.T) {
 
-	//TODO: テストケースをそれぞれのAPIの成功ケースについて実装するかどうか議論する
-	b := []byte("test")
-	w := httptest.NewRecorder()
-	SuccessView(w, b)
+	//errorPattern
+	tests := []struct {
+		description string
+		test        []byte
+		wanted      []byte
+	}{{
+		description: "Test StatusOK",
+		test:        []byte(`"test"`),
+		wanted:      []byte(`"test"`),
+	}}
 
-	rw := w.Result()
+	for id, tt := range tests {
 
-	if rw.StatusCode != http.StatusOK {
-		t.Fatal("unexpected status code")
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
+
+		t.Run(testCaseName, func(t *testing.T) {
+
+			//TODO: テストケースをそれぞれのAPIの成功ケースについて実装するかどうか議論する
+			w := httptest.NewRecorder()
+			SuccessView(w, tt.test)
+
+			rw := w.Result()
+
+			if rw.StatusCode != http.StatusOK {
+				t.Fatal("unexpected status code")
+			}
+
+			got, err := ioutil.ReadAll(rw.Body)
+			if err != nil {
+				t.Fatal("unexpected error")
+			}
+
+			if string(got) != string(tt.wanted) {
+				t.Errorf(`Error SuccessView: %v but want %q`, got, tt.wanted)
+			}
+
+		})
 	}
-
-	got, err := ioutil.ReadAll(rw.Body)
-	if err != nil {
-		t.Fatal("unexpected error")
-	}
-
-	const expected = "test"
-	if string(got) != expected {
-		t.Errorf(`Error SuccessView: %v but want %q`, got, expected)
-	}
-
 }

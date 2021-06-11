@@ -11,44 +11,45 @@ func TestRepository(t *testing.T) {
 
 	//user_test.goでテストケースを1つにしているためこちらも同様に設定
 	tests := []struct {
-		id      int
-		userId  int
-		name    string
-		newName string
+		description     string
+		testUserId      int
+		testUserName    string
+		testNewUserName string
 	}{
-		{userId: 1, name: "a", newName: "new_a"},
+		{description: "Test a series of API processes related to Users.",
+			testUserId: 1, testUserName: "a", testNewUserName: "new_a"},
 	}
 
-	for _, tt := range tests {
-		testName := fmt.Sprintf("number:%v", tt.id)
+	for id, tt := range tests {
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
 
-		t.Run(testName, func(t *testing.T) {
+		t.Run(testCaseName, func(t *testing.T) {
 			//test Insert: CreateUser
-			testUserModelFromView := model.User{Name: tt.name}
+			testUserModelFromView := model.User{Name: tt.testUserName}
 			user, err := Insert(testUserModelFromView)
 			if err != nil {
 				t.Errorf("Error implementing Insert: %s", err.Error())
 			}
 
 			//test Select: GetUser
-			user.Id = tt.id
+			user.Id = tt.testUserId
 			gotUser, err := SelectNameById(*user)
 			if err != nil {
 				t.Errorf("Error implementing SelectNameById: %s", err.Error())
 			}
-			if gotUser.Name != tt.name {
-				t.Errorf(`Error SelectNameById: %v but want %q`, gotUser.Name, tt.name)
+			if gotUser.Name != tt.testUserName {
+				t.Errorf(`Error SelectNameById: %v but want %q`, gotUser.Name, tt.testUserName)
 			}
 
 			//test Update: UpdateUser
-			testNewUserModelFromView := model.User{Id: tt.id, Name: tt.newName}
+			testNewUserModelFromView := model.User{Id: tt.testUserId, Name: tt.testNewUserName}
 			_, err = UpdateNameById(testNewUserModelFromView)
 			if err != nil {
 				t.Errorf("Error implementing UpdateNameById: %s", err.Error())
 			}
 			gotUser, _ = SelectNameById(testNewUserModelFromView)
-			if gotUser.Name != tt.newName {
-				t.Errorf(`Error UpdateNameById(SelectNameById): %v but want %q`, gotUser.Name, tt.newName)
+			if gotUser.Name != tt.testNewUserName {
+				t.Errorf(`Error UpdateNameById(SelectNameById): %v but want %q`, gotUser.Name, tt.testNewUserName)
 			}
 		})
 
