@@ -2,7 +2,6 @@ package gacha
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/repository/gacha"
@@ -41,14 +40,31 @@ func TestDrawGacha(t *testing.T) {
 
 func TestRandChooseLotteryRate(t *testing.T) {
 
+	tests := []struct {
+		description     string
+		testUserRandNum float64
+	}{
+		{description: "Test with small numbers", testUserRandNum: 0.1},
+		{description: "Test with large numbers", testUserRandNum: 0.9},
+	}
+
 	//gchaRepositoryにてtest済み
 	testLotteryRateList, _ := gacha.SelectLotteryRateList()
-	testUserRandNum := rand.Float64()
 
-	rate := RandChooseLotteryRate(testUserRandNum, testLotteryRateList)
+	for id, tt := range tests {
 
-	if rate <= 0 || 1 <= rate {
-		t.Error("Error RandChooseLotteryRate")
+		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
+
+		t.Run(testCaseName, func(t *testing.T) {
+
+			rate := RandChooseLotteryRate(tt.testUserRandNum, testLotteryRateList)
+
+			if rate <= 0 || 1 <= rate {
+				t.Error("Error RandChooseLotteryRate")
+			}
+			fmt.Println(rate)
+
+		})
 	}
-	fmt.Println(rate)
+
 }
