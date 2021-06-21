@@ -13,11 +13,11 @@ func TestCharacterRepository(t *testing.T) {
 
 	tests := []struct {
 		description string
-		testRate    float64
+		rate        float64
 	}{
-		{description: "Test the operation of the character repo process .", testRate: 0.1},
-		{description: "Test if characterId is unique .", testRate: 0.1},
-		{description: "Test to see if you can get a new kind of character.", testRate: 0.3},
+		{description: "Test the operation of the character repo process .", rate: 0.1},
+		{description: "Test if characterId is unique .", rate: 0.1},
+		{description: "Test to see if you can get a new kind of character.", rate: 0.3},
 	}
 
 	testUserModelFromView := model.User{Name: "testUser"}
@@ -35,7 +35,7 @@ func TestCharacterRepository(t *testing.T) {
 			//ParallelTest
 			t.Parallel()
 
-			testGachaResult, _ := gacha.RandSelectCharacterByRate(tt.testRate)
+			testGachaResult, _ := gacha.RandSelectCharacterByRate(tt.rate)
 
 			//test: SelectMaxSeqNum
 			maxSeq, err := SelectMaxSeqNum(*user, testGachaResult)

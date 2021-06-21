@@ -31,7 +31,7 @@ func CreateUser() http.HandlerFunc {
 			return
 		}
 
-		//varify space
+		//varify space: 手動で動作テスト済
 		slice := strings.Split(reqParams.Name, "")
 		len := len(slice)
 		if len <= 0 {
@@ -189,6 +189,7 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
+		//varify space: 手動で動作テスト済
 		if reqParams.Times <= 0 {
 			err = fmt.Errorf("%s", "The value of times must be at least 1.")
 			params := view.ErrorViewParams{
@@ -199,7 +200,7 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		//fetch token and extract userid
+		//fetch token and extract userId
 		token := req.Header.Get("X-Auth-Token")
 		userClaims, err := auth.DecodeToken(token)
 		if err != nil {

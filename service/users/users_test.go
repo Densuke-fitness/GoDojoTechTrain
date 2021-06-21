@@ -11,10 +11,13 @@ func TestUsers(t *testing.T) {
 
 	//同値クラスの関係でテストケースを1つにしている:異常系はcontrallerでバリデートしている
 	tests := []struct {
-		description  string
-		testUserName string
+		description string
+		userName    string
 	}{
-		{description: "Test a series of API processes related to Users.", testUserName: "a"},
+		{
+			description: "Test a series of API processes related to Users.",
+			userName:    "a",
+		},
 	}
 
 	for id, tt := range tests {
@@ -22,7 +25,7 @@ func TestUsers(t *testing.T) {
 
 		t.Run(testCaseName, func(t *testing.T) {
 			//test CreateUser
-			userId, err := CreateUser(tt.testUserName)
+			userId, err := CreateUser(tt.userName)
 			if err != nil {
 				t.Errorf("Error implementing CreateUser: %s", err.Error())
 			}
@@ -41,7 +44,7 @@ func TestUsers(t *testing.T) {
 			if err != nil {
 				t.Errorf("Error implementing GetUser: %s", err.Error())
 			}
-			if gotUserName != tt.testUserName {
+			if gotUserName != tt.userName {
 				t.Errorf("Error implementing GetUser: %s", err.Error())
 			}
 

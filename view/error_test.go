@@ -12,21 +12,21 @@ func TestErrorView(t *testing.T) {
 
 	//errorPattern
 	tests := []struct {
-		description    string
-		testStatusCode int
-		wantedError    []byte
+		description string
+		statusCode  int
+		wantedError []byte
 	}{{
-		description:    "Test IntervalServerError",
-		testStatusCode: http.StatusInternalServerError,
-		wantedError:    []byte(`"error": "IntervalServerError"`),
+		description: "Test IntervalServerError",
+		statusCode:  http.StatusInternalServerError,
+		wantedError: []byte(`"error": "IntervalServerError"`),
 	}, {
-		description:    "Test IntervalServerError",
-		testStatusCode: http.StatusBadRequest,
-		wantedError:    []byte(`"error": "StatusBadRequest"`),
+		description: "Test IntervalServerError",
+		statusCode:  http.StatusBadRequest,
+		wantedError: []byte(`"error": "StatusBadRequest"`),
 	}, {
-		description:    "Test GeneralError",
-		testStatusCode: http.StatusBadGateway,
-		wantedError:    []byte(`"error": "GeneralError"`),
+		description: "Test GeneralError",
+		statusCode:  http.StatusBadGateway,
+		wantedError: []byte(`"error": "GeneralError"`),
 	}}
 
 	for id, tt := range tests {
@@ -36,7 +36,7 @@ func TestErrorView(t *testing.T) {
 		//Define an anonymous helper function
 		testParams := func(StatusCode int) ErrorViewParams {
 			return ErrorViewParams{nil, StatusCode}
-		}(tt.testStatusCode)
+		}(tt.statusCode)
 
 		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
 
