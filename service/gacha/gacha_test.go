@@ -41,11 +41,11 @@ func TestDrawGacha(t *testing.T) {
 func TestRandChooseLotteryRate(t *testing.T) {
 
 	tests := []struct {
-		description     string
-		testUserRandNum float64
+		description string
+		userRandNum float64
 	}{
-		{description: "Test with small numbers", testUserRandNum: 0.1},
-		{description: "Test with large numbers", testUserRandNum: 0.9},
+		{description: "Test with small numbers", userRandNum: 0.1},
+		{description: "Test with large numbers", userRandNum: 0.9},
 	}
 
 	//gchaRepositoryにてtest済み
@@ -57,7 +57,7 @@ func TestRandChooseLotteryRate(t *testing.T) {
 
 		t.Run(testCaseName, func(t *testing.T) {
 
-			rate := RandChooseLotteryRate(tt.testUserRandNum, testLotteryRateList)
+			rate := RandChooseLotteryRate(tt.userRandNum, testLotteryRateList)
 
 			if rate <= 0 || 1 <= rate {
 				t.Error("Error RandChooseLotteryRate")

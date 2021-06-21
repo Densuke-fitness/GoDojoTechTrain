@@ -12,11 +12,11 @@ func TestCharacter(t *testing.T) {
 
 	//同値クラスの関係でテストケースを1つにしている
 	tests := []struct {
-		description  string
-		testUserName string
-		testTimes    int
+		description string
+		userName    string
+		times       int
 	}{
-		{description: "Test a series of API processes related to Character.", testUserName: "a"},
+		{description: "Test a series of API processes related to Character.", userName: "a"},
 	}
 
 	for id, tt := range tests {
@@ -25,10 +25,10 @@ func TestCharacter(t *testing.T) {
 
 		t.Run(testCaseName, func(t *testing.T) {
 
-			gotToken, _ := users.CreateUser(tt.testUserName)
+			gotToken, _ := users.CreateUser(tt.userName)
 
 			//gacha_testにて設定を10にしているためこちらも同様に設定
-			_, _ = gacha.DrawGacha(tt.testTimes, gotToken)
+			_, _ = gacha.DrawGacha(tt.times, gotToken)
 
 			gotCharacters, err := GetCharacterList(gotToken)
 			if err != nil {

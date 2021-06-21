@@ -13,11 +13,11 @@ func TestSuccessView(t *testing.T) {
 	//errorPattern
 	tests := []struct {
 		description string
-		test        []byte
+		responseVal []byte
 		wanted      []byte
 	}{{
 		description: "Test StatusOK",
-		test:        []byte(`"test"`),
+		responseVal: []byte(`"test"`),
 		wanted:      []byte(`"test"`),
 	}}
 
@@ -29,7 +29,7 @@ func TestSuccessView(t *testing.T) {
 
 			//TODO: テストケースをそれぞれのAPIの成功ケースについて実装するかどうか議論する
 			w := httptest.NewRecorder()
-			SuccessView(w, tt.test)
+			SuccessView(w, tt.responseVal)
 
 			rw := w.Result()
 

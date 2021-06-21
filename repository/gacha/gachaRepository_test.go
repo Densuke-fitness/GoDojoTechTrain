@@ -20,13 +20,13 @@ func TestRandSelectCharacterByRate(t *testing.T) {
 	//test :RandSelectCharacterByRate: 循環参照が起こるため値を設定
 	tests := []struct {
 		description string
-		testRate    float64
+		rate        float64
 		wantErr     bool
 	}{
 		//normal case
-		{description: "Test Normal Case", testRate: 0.1, wantErr: false},
+		{description: "Test Normal Case", rate: 0.1, wantErr: false},
 		//abnormal case
-		{description: "Test Abnormal Case", testRate: 0.6, wantErr: true},
+		{description: "Test Abnormal Case", rate: 0.6, wantErr: true},
 	}
 
 	for id, tt := range tests {
@@ -35,7 +35,7 @@ func TestRandSelectCharacterByRate(t *testing.T) {
 
 		t.Run(testCaseName, func(t *testing.T) {
 
-			gachaResult, err := RandSelectCharacterByRate(tt.testRate)
+			gachaResult, err := RandSelectCharacterByRate(tt.rate)
 
 			//test abnormal case
 			if tt.wantErr {
