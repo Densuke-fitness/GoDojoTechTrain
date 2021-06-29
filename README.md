@@ -78,3 +78,4 @@ sh testing.sh
 - [Go言語で理解するJWT認証 実装ハンズオン](https://qiita.com/po3rin/items/740445d21487dfcb5d9f)
 - [Go database/sql tutorial](http://go-database-sql.org/index.html)
 - [コンテナで動くDBとアプリとの疎通をGithub Actionsでテストする](https://times.hrbrain.co.jp/entry/test-using-container-on-github-actions)
+- [構造体のフィールドをJSON Schemaでvalidationする](https://qiita.com/nownabe/items/e62bbedd2e1687d1ff70)

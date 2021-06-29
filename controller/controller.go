@@ -2,10 +2,8 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/character"
 	"github.com/Densuke-fitness/GoDojoTechTrain/service/gacha"
@@ -17,9 +15,8 @@ import (
 func CreateUser() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 		//Structure to be stored when a reqParams is received from a user
-		var reqParams = struct {
-			Name string `json:"name"`
-		}{}
+
+		reqParams := ReqParamsCreateUser{}
 
 		err := json.NewDecoder(req.Body).Decode(&reqParams)
 		if err != nil {
@@ -31,29 +28,14 @@ func CreateUser() http.HandlerFunc {
 			return
 		}
 
-		//varify space: 手動で動作テスト済
-		slice := strings.Split(reqParams.Name, "")
-		len := len(slice)
-		if len <= 0 {
-			err = fmt.Errorf("%s", "Filled in with 0 characters.")
+		err = reqParams.Validate()
+		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusBadRequest,
 			}
 			view.ErrorView(resp, params)
 			return
-		}
-
-		for i := 0; i < len; i++ {
-			if slice[i] == " " || slice[i] == "　" {
-				err = fmt.Errorf("%s", "Included space string")
-				params := view.ErrorViewParams{
-					Error:      err,
-					StatusCode: http.StatusBadRequest,
-				}
-				view.ErrorView(resp, params)
-				return
-			}
 		}
 
 		// Passing values to the model and executing the process
@@ -147,14 +129,22 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 
-		var reqParams = struct {
-			Name string `json:"name"`
-		}{}
+		reqParams := ReqParamsUpdateUser{}
 		err = json.NewDecoder(req.Body).Decode(&reqParams)
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusInternalServerError,
+			}
+			view.ErrorView(resp, params)
+			return
+		}
+
+		err = reqParams.Validate()
+		if err != nil {
+			params := view.ErrorViewParams{
+				Error:      err,
+				StatusCode: http.StatusBadRequest,
 			}
 			view.ErrorView(resp, params)
 			return
@@ -176,9 +166,8 @@ func UpdateUser() http.HandlerFunc {
 func DrawGacha() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 
-		var reqParams = struct {
-			Times int `json:"times"`
-		}{}
+		reqParams := ReqParamsDrawGacha{}
+
 		err := json.NewDecoder(req.Body).Decode(&reqParams)
 		if err != nil {
 			params := view.ErrorViewParams{
@@ -189,9 +178,8 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		//varify space: 手動で動作テスト済
-		if reqParams.Times <= 0 {
-			err = fmt.Errorf("%s", "The value of times must be at least 1.")
+		err = reqParams.Validate()
+		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
 				StatusCode: http.StatusBadRequest,
