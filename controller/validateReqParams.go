@@ -7,9 +7,8 @@ import (
 
 type ReqParams struct{}
 
-func (req ReqParams) Validate() error
-
 type ReqParamsCreateUser struct {
+	ReqParams
 	Name string `json:"name"`
 }
 
@@ -19,6 +18,7 @@ func (reqC ReqParamsCreateUser) Validate() error {
 }
 
 type ReqParamsUpdateUser struct {
+	ReqParams
 	Name string `json:"name"`
 }
 
@@ -48,6 +48,7 @@ func (n Name) Validate() error {
 }
 
 type ReqParamsDrawGacha struct {
+	ReqParams
 	Times int `json:"times"`
 }
 
