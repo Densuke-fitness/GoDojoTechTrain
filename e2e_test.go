@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -47,6 +48,13 @@ func TestE2E(t *testing.T) {
 	respBody, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(respBody))
 
+	tmp := struct {
+		Token string `json:"token"`
+	}{}
+	if err := json.Unmarshal(respBody, &tmp); err != nil {
+		fmt.Println(err)
+		return
+	}
 	//Test GetUser
 	req, err = http.NewRequest(http.MethodGet, testServer.URL+"/user/get", nil)
 	if err != nil {
@@ -54,7 +62,7 @@ func TestE2E(t *testing.T) {
 			t.Errorf("req error: %s", err.Error())
 		}
 	}
-	req.Header.Set("X-Auth-Token", string(respBody))
+	req.Header.Set("X-Auth-Token", tmp.Token)
 
 	client = new(http.Client)
 	resp, err = client.Do(req)
