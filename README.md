@@ -79,3 +79,5 @@ sh testing.sh
 - [Go database/sql tutorial](http://go-database-sql.org/index.html)
 - [コンテナで動くDBとアプリとの疎通をGithub Actionsでテストする](https://times.hrbrain.co.jp/entry/test-using-container-on-github-actions)
 - [構造体のフィールドをJSON Schemaでvalidationする](https://qiita.com/nownabe/items/e62bbedd2e1687d1ff70)
+- [Goでサーバを立ち上げてE2Eテストを実施するCI用のテストコードを書く](https://budougumi0617.github.io/2020/03/27/http-test-in-go/)
+- [Goでhttpリクエストを送信する方法](https://qiita.com/taizo/items/c397dbfed7215969b0a5)
