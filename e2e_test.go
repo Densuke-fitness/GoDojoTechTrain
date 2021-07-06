@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -29,11 +30,10 @@ func TestE2E(t *testing.T) {
 
 	//Test CreateUser
 	var jsonStr = []byte(`{"name":"TestUser"}`)
-
 	req, err := http.NewRequest(http.MethodPost, testServer.URL+"/user/create", bytes.NewBuffer(jsonStr))
 	if err != nil {
 		if err != nil {
-			t.Errorf("Call error: %s", err.Error())
+			t.Errorf("req error: %s", err.Error())
 		}
 	}
 	req.Header.Set("Content-Type", "application/json")
@@ -42,10 +42,84 @@ func TestE2E(t *testing.T) {
 	resp, err := client.Do(req)
 	if err != nil {
 		if err != nil {
-			t.Errorf("Call error: %s", err.Error())
+			t.Errorf("resp error: %s", err.Error())
 		}
 	}
-
 	respBody, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(respBody))
+
+	tmp := struct {
+		Token string `json:"token"`
+	}{}
+	if err := json.Unmarshal(respBody, &tmp); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	//Test GetUser
+	req, err = http.NewRequest(http.MethodGet, testServer.URL+"/user/get", nil)
+	if err != nil {
+		if err != nil {
+			t.Errorf("req error: %s", err.Error())
+		}
+	}
+	req.Header.Set("X-Auth-Token", tmp.Token)
+
+	client = new(http.Client)
+	resp, err = client.Do(req)
+	if err != nil {
+		if err != nil {
+			t.Errorf("resp error: %s", err.Error())
+		}
+	}
+	respBody, _ = ioutil.ReadAll(resp.Body)
+	fmt.Println(string(respBody))
+
+	//Test UpdateUser
+	jsonStr = []byte(`{"name":"TestNewUser"}`)
+	req, _ = http.NewRequest(http.MethodPut, testServer.URL+"/user/update", bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Auth-Token", tmp.Token)
+
+	client = new(http.Client)
+	resp, err = client.Do(req)
+	if err != nil {
+		if err != nil {
+			t.Errorf("resp error: %s", err.Error())
+		}
+	}
+	respBody, _ = ioutil.ReadAll(resp.Body)
+	fmt.Println(string(respBody))
+
+	//Test DrawGacha
+	jsonStr = []byte(`{"times":10}`)
+	req, _ = http.NewRequest(http.MethodGet, testServer.URL+"/gacha/draw", bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Auth-Token", tmp.Token)
+
+	client = new(http.Client)
+	resp, err = client.Do(req)
+	if err != nil {
+		if err != nil {
+			t.Errorf("resp error: %s", err.Error())
+		}
+	}
+	respBody, _ = ioutil.ReadAll(resp.Body)
+	fmt.Println(string(respBody))
+
+	//Test GetCharacterList
+	req, _ = http.NewRequest(http.MethodPut, testServer.URL+"/character/list", nil)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Auth-Token", tmp.Token)
+
+	client = new(http.Client)
+	resp, err = client.Do(req)
+	if err != nil {
+		if err != nil {
+			t.Errorf("resp error: %s", err.Error())
+		}
+	}
+	respBody, _ = ioutil.ReadAll(resp.Body)
+	fmt.Println(string(respBody))
+
 }
