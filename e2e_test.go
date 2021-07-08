@@ -30,6 +30,7 @@ func TestE2E(t *testing.T) {
 
 	//Test CreateUser
 	var jsonStr = []byte(`{"name":"TestUser"}`)
+
 	req, err := http.NewRequest(http.MethodPost, testServer.URL+"/user/create", bytes.NewBuffer(jsonStr))
 	if err != nil {
 		if err != nil {
@@ -82,18 +83,16 @@ func TestE2E(t *testing.T) {
 	req.Header.Set("X-Auth-Token", tmp.Token)
 
 	client = new(http.Client)
-	resp, err = client.Do(req)
+	_, err = client.Do(req)
 	if err != nil {
 		if err != nil {
 			t.Errorf("resp error: %s", err.Error())
 		}
 	}
-	respBody, _ = ioutil.ReadAll(resp.Body)
-	fmt.Println(string(respBody))
 
 	//Test DrawGacha
 	jsonStr = []byte(`{"times":10}`)
-	req, _ = http.NewRequest(http.MethodGet, testServer.URL+"/gacha/draw", bytes.NewBuffer(jsonStr))
+	req, _ = http.NewRequest(http.MethodPost, testServer.URL+"/gacha/draw", bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Auth-Token", tmp.Token)
 
@@ -108,7 +107,7 @@ func TestE2E(t *testing.T) {
 	fmt.Println(string(respBody))
 
 	//Test GetCharacterList
-	req, _ = http.NewRequest(http.MethodPut, testServer.URL+"/character/list", nil)
+	req, _ = http.NewRequest(http.MethodGet, testServer.URL+"/character/list", nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Auth-Token", tmp.Token)
 
