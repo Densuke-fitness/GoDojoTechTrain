@@ -33,18 +33,14 @@ func TestE2E(t *testing.T) {
 
 	req, err := http.NewRequest(http.MethodPost, testServer.URL+"/user/create", bytes.NewBuffer(jsonStr))
 	if err != nil {
-		if err != nil {
-			t.Errorf("req error: %s", err.Error())
-		}
+		t.Errorf("req error: %s", err.Error())
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	client := new(http.Client)
 	resp, err := client.Do(req)
 	if err != nil {
-		if err != nil {
-			t.Errorf("resp error: %s", err.Error())
-		}
+		t.Errorf("resp error: %s", err.Error())
 	}
 	respBody, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(respBody))
@@ -60,18 +56,14 @@ func TestE2E(t *testing.T) {
 	//Test GetUser
 	req, err = http.NewRequest(http.MethodGet, testServer.URL+"/user/get", nil)
 	if err != nil {
-		if err != nil {
-			t.Errorf("req error: %s", err.Error())
-		}
+		t.Errorf("req error: %s", err.Error())
 	}
 	req.Header.Set("X-Auth-Token", tmp.Token)
 
 	client = new(http.Client)
 	resp, err = client.Do(req)
 	if err != nil {
-		if err != nil {
-			t.Errorf("resp error: %s", err.Error())
-		}
+		t.Errorf("resp error: %s", err.Error())
 	}
 	respBody, _ = ioutil.ReadAll(resp.Body)
 	fmt.Println(string(respBody))
@@ -85,9 +77,7 @@ func TestE2E(t *testing.T) {
 	client = new(http.Client)
 	_, err = client.Do(req)
 	if err != nil {
-		if err != nil {
-			t.Errorf("resp error: %s", err.Error())
-		}
+		t.Errorf("resp error: %s", err.Error())
 	}
 
 	//Test DrawGacha
@@ -99,9 +89,7 @@ func TestE2E(t *testing.T) {
 	client = new(http.Client)
 	resp, err = client.Do(req)
 	if err != nil {
-		if err != nil {
-			t.Errorf("resp error: %s", err.Error())
-		}
+		t.Errorf("resp error: %s", err.Error())
 	}
 	respBody, _ = ioutil.ReadAll(resp.Body)
 	fmt.Println(string(respBody))
@@ -114,9 +102,7 @@ func TestE2E(t *testing.T) {
 	client = new(http.Client)
 	resp, err = client.Do(req)
 	if err != nil {
-		if err != nil {
-			t.Errorf("resp error: %s", err.Error())
-		}
+		t.Errorf("resp error: %s", err.Error())
 	}
 	respBody, _ = ioutil.ReadAll(resp.Body)
 	fmt.Println(string(respBody))
