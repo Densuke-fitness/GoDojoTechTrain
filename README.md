@@ -62,6 +62,8 @@ curl -H "X-Auth-Token:<token-key>" http://localhost:8080/character/list
 
 ## Testing
 
+It will be launched for CI test execution. It will not work in a local environment without the go environment.
+
 ```
 sh testing.sh 
 ```
