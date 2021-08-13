@@ -90,6 +90,6 @@ docker run go_db:db -v "$PWD/schema:/output" --net="host" schemaspy/schemaspy:sn
 - [構造体のフィールドをJSON Schemaでvalidationする](https://qiita.com/nownabe/items/e62bbedd2e1687d1ff70)
 - [Goでサーバを立ち上げてE2Eテストを実施するCI用のテストコードを書く](https://budougumi0617.github.io/2020/03/27/http-test-in-go/)
 - [Goでhttpリクエストを送信する方法](https://qiita.com/taizo/items/c397dbfed7215969b0a5)
-- https://hub.docker.com/r/schemaspy/schemaspy/
-- https://qiita.com/kamukiriri/items/ab1669c19831c18db9ee
-- https://qiita.com/ngyuki/items/4efa0734e8d8582bfc16
+- [schemaspy/schemaspy](https://hub.docker.com/r/schemaspy/schemaspy/)
+- [DockerでサクッとDBからER図を作成する](https://qiita.com/kamukiriri/items/ab1669c19831c18db9ee)
+- [Docker でサクッと MySQL 8 からER図を作成する](https://qiita.com/ngyuki/items/4efa0734e8d8582bfc16)
