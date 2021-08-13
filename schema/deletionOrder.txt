@@ -1,0 +1,5 @@
+possession_characters
+characters_lottery_rate
+users
+events_master
+characters_master
