@@ -66,9 +66,18 @@ curl -H "X-Auth-Token:<token-key>" http://localhost:8080/character/list
 sh testing.sh 
 ```
 
-
 ## ERD
+
+### written by draw.io
 - [TechTrainERD.drawio](https://drive.google.com/file/d/1eJ9z5BW58hKN4MKJkjldIqqWgjXTSEEe/view?usp=sharing)
+
+### 
+If you want to get ERD by using  schemaspy, please enter the following command .
+```
+docker run go_db:db -v "$PWD/schema:/output" --net="host" schemaspy/schemaspy:snapshot \
+ -t mysql -host 0.0.0.0:3306 -db techtraindb -u root -p passw0rd -s  techtraindb 
+ ```
+
 
 ### Reference
 - [オンライン版　CA Tech Dojo サーバサイド (Go)編](https://techbowl.co.jp/techtrain/missions/12)
@@ -81,3 +90,6 @@ sh testing.sh
 - [構造体のフィールドをJSON Schemaでvalidationする](https://qiita.com/nownabe/items/e62bbedd2e1687d1ff70)
 - [Goでサーバを立ち上げてE2Eテストを実施するCI用のテストコードを書く](https://budougumi0617.github.io/2020/03/27/http-test-in-go/)
 - [Goでhttpリクエストを送信する方法](https://qiita.com/taizo/items/c397dbfed7215969b0a5)
+- https://hub.docker.com/r/schemaspy/schemaspy/
+- https://qiita.com/kamukiriri/items/ab1669c19831c18db9ee
+- https://qiita.com/ngyuki/items/4efa0734e8d8582bfc16
