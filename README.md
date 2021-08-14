@@ -75,6 +75,7 @@ sh testing.sh
 
 ### 
 If you want to get ERD by using  schemaspy, please enter the following command .
+
 ```
 docker run go_db:db -v "$PWD/schema:/output" --net="host" schemaspy/schemaspy:snapshot \
  -t mysql -host 0.0.0.0:3306 -db techtraindb -u root -p passw0rd -s  techtraindb 
