@@ -5,6 +5,15 @@ import (
 	"strings"
 )
 
+type ReqParams interface {
+	Validate() error
+}
+
+func ValidateForReqParams(reqParams ReqParams) error {
+	err := reqParams.Validate()
+	return err
+}
+
 type ReqParamsCreateUser struct {
 	Name string `json:"name"`
 }
