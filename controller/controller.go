@@ -28,7 +28,8 @@ func CreateUser() http.HandlerFunc {
 			return
 		}
 
-		err = reqParams.Validate()
+		err = ValidateForReqParams(reqParams)
+
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -140,7 +141,8 @@ func UpdateUser() http.HandlerFunc {
 			return
 		}
 
-		err = reqParams.Validate()
+		err = ValidateForReqParams(reqParams)
+
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
@@ -178,7 +180,8 @@ func DrawGacha() http.HandlerFunc {
 			return
 		}
 
-		err = reqParams.Validate()
+		err = ValidateForReqParams(reqParams)
+
 		if err != nil {
 			params := view.ErrorViewParams{
 				Error:      err,
