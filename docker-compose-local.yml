@@ -1,0 +1,39 @@
+version: '3'
+services:
+  test_go_db:
+    container_name: test_go_db
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: passw0rd
+      MYSQL_DATABASE: techtraindb
+    volumes:
+      - db-volume:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  test_go_api:
+    container_name: test_go_api
+    tty: true
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DBDRIVER: "mysql"
+      DBHOST: "test_go_db"
+      DBPORT: "3306"
+      DBUSERNAME : "root"
+      DBPASSWORD: "passw0rd"
+      DBNAME: "techtraindb"
+
+    depends_on:
+      - go_db  
+
+volumes:
+  db-volume:
+          
