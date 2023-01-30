@@ -32,7 +32,7 @@ services:
       DBNAME: "techtraindb"
 
     depends_on:
-      - go_db  
+      - test_go_db  
 
 volumes:
   db-volume:
