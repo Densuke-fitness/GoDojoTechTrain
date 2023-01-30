@@ -1,4 +1,4 @@
-package view
+package middleware
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestErrorView(t *testing.T) {
+func TestError(t *testing.T) {
 
 	//errorPattern
 	tests := []struct {
@@ -34,8 +34,8 @@ func TestErrorView(t *testing.T) {
 		tt := tt
 
 		//Define an anonymous helper function
-		testParams := func(StatusCode int) ErrorViewParams {
-			return ErrorViewParams{nil, StatusCode}
+		testParams := func(StatusCode int) ErrorParams {
+			return ErrorParams{nil, StatusCode}
 		}(tt.statusCode)
 
 		testCaseName := fmt.Sprintf("%v: %v", id+1, tt.description)
@@ -45,9 +45,9 @@ func TestErrorView(t *testing.T) {
 			//ParallelTest
 			t.Parallel()
 
-			//test :ErrorView
+			//test :Error
 			w := httptest.NewRecorder()
-			ErrorView(w, testParams)
+			Error(w, testParams)
 
 			rw := w.Result()
 

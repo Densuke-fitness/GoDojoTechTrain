@@ -25,8 +25,8 @@ func TestRepository(t *testing.T) {
 
 		t.Run(testCaseName, func(t *testing.T) {
 			//test Insert: CreateUser
-			testUserModelFromView := model.User{Name: tt.userName}
-			user, err := Insert(testUserModelFromView)
+			testUserModel := model.User{Name: tt.userName}
+			user, err := Insert(testUserModel)
 			if err != nil {
 				t.Errorf("Error implementing Insert: %s", err.Error())
 			}
@@ -41,12 +41,12 @@ func TestRepository(t *testing.T) {
 			}
 
 			//test Update: UpdateUser
-			testNewUserModelFromView := model.User{Id: tt.userId, Name: tt.newUserName}
-			_, err = UpdateNameById(testNewUserModelFromView)
+			testNewUserModel := model.User{Id: tt.userId, Name: tt.newUserName}
+			_, err = UpdateNameById(testNewUserModel)
 			if err != nil {
 				t.Errorf("Error implementing UpdateNameById: %s", err.Error())
 			}
-			gotUser, _ = SelectNameById(testNewUserModelFromView)
+			gotUser, _ = SelectNameById(testNewUserModel)
 			if gotUser.Name != tt.newUserName {
 				t.Errorf(`Error UpdateNameById(SelectNameById): %v but want %q`, gotUser.Name, tt.newUserName)
 			}

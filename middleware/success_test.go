@@ -1,4 +1,4 @@
-package view
+package middleware
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSuccessView(t *testing.T) {
+func TestSuccess(t *testing.T) {
 
 	//errorPattern
 	tests := []struct {
@@ -29,7 +29,7 @@ func TestSuccessView(t *testing.T) {
 
 			//TODO: テストケースをそれぞれのAPIの成功ケースについて実装するかどうか議論する
 			w := httptest.NewRecorder()
-			SuccessView(w, tt.responseVal)
+			Success(w, tt.responseVal)
 
 			rw := w.Result()
 
@@ -43,7 +43,7 @@ func TestSuccessView(t *testing.T) {
 			}
 
 			if string(got) != string(tt.wanted) {
-				t.Errorf(`Error SuccessView: %v but want %q`, got, tt.wanted)
+				t.Errorf(`Error Success: %v but want %q`, got, tt.wanted)
 			}
 
 		})

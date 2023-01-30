@@ -73,7 +73,7 @@ sh testing.sh
 ### written by draw.io
 - [TechTrainERD.drawio](https://drive.google.com/file/d/1eJ9z5BW58hKN4MKJkjldIqqWgjXTSEEe/view?usp=sharing)
 
-### 
+### schemaspy
 If you want to get ERD by using  schemaspy, please enter the following command .
 
 ```

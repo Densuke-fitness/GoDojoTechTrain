@@ -8,10 +8,10 @@ import (
 
 func UpdateUser(name string, userId int) error {
 
-	userModelFromView := model.User{Name: name, Id: userId}
+	userModel := model.User{Name: name, Id: userId}
 
 	//I used _ because I don't want to use the number of updates this time.
-	_, err := users.UpdateNameById(userModelFromView)
+	_, err := users.UpdateNameById(userModel)
 	if err != nil {
 		logger.Errorf("Error UpdateNameById: %s", err)
 		return err

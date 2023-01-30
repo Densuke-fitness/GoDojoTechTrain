@@ -8,9 +8,9 @@ import (
 
 func GetCharacterList(userId int) ([]model.Character, error) {
 
-	userModelFromView := model.User{Id: userId}
+	userModel := model.User{Id: userId}
 
-	characters, err := character.SelectCharactersByUserId(userModelFromView)
+	characters, err := character.SelectCharactersByUserId(userModel)
 	if err != nil {
 		logger.Errorf("Error SelectCharactersById: %s", err)
 		return nil, err

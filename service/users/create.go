@@ -7,9 +7,9 @@ import (
 )
 
 func CreateUser(name string) (int, error) {
-	userModelFromView := model.User{Name: name}
+	userModel := model.User{Name: name}
 	//database prosess
-	user, err := users.Insert(userModelFromView)
+	user, err := users.Insert(userModel)
 
 	if err != nil {
 		logger.Errorf("Error Insert: %s", err)

@@ -12,7 +12,7 @@ import (
 
 func DrawGacha(times int, userId int) ([]model.Character, error) {
 
-	userModelFromView := model.User{Id: userId}
+	userModel := model.User{Id: userId}
 
 	LotteryRateList, err := gacha.SelectLotteryRateList()
 	if err != nil {
@@ -32,7 +32,7 @@ func DrawGacha(times int, userId int) ([]model.Character, error) {
 			return nil, err
 		}
 
-		maxSeq, err := character.SelectMaxSeqNum(userModelFromView, gachaResult)
+		maxSeq, err := character.SelectMaxSeqNum(userModel, gachaResult)
 		if err != nil {
 			return nil, err
 		}
@@ -40,7 +40,7 @@ func DrawGacha(times int, userId int) ([]model.Character, error) {
 
 		gachaResult.CharacterSeq = maxSeq
 
-		err = character.Insert(userModelFromView, gachaResult)
+		err = character.Insert(userModel, gachaResult)
 		if err != nil {
 			logger.Errorf("Error Insert: %s", err)
 			return nil, err

@@ -1,4 +1,4 @@
-package view
+package middleware
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	logger "github.com/sirupsen/logrus"
 )
 
-func ErrorView(resp http.ResponseWriter, params ErrorViewParams) {
+func Error(resp http.ResponseWriter, params ErrorParams) {
 	resp.Header().Set("Content-type", "application/json")
 
 	errMsg := generateError(params.StatusCode)
@@ -28,7 +28,7 @@ func generateError(StatusCode int) string {
 	}
 }
 
-type ErrorViewParams struct {
+type ErrorParams struct {
 	Error      error
 	StatusCode int
 }
