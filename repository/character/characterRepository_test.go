@@ -20,9 +20,9 @@ func TestCharacterRepository(t *testing.T) {
 		{description: "Test to see if you can get a new kind of character.", rate: 0.3},
 	}
 
-	testUserModelFromView := model.User{Name: "testUser"}
+	testUserModel := model.User{Name: "testUser"}
 	//ユーザーの作成
-	user, _ := users.Insert(testUserModelFromView)
+	user, _ := users.Insert(testUserModel)
 
 	for id, tt := range tests {
 		//ParallelTest

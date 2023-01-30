@@ -8,10 +8,10 @@ import (
 
 func GetUser(userId int) (string, error) {
 
-	userModelFromView := model.User{Id: userId}
+	userModel := model.User{Id: userId}
 
 	//search name by using id
-	user, err := users.SelectNameById(userModelFromView)
+	user, err := users.SelectNameById(userModel)
 	if err != nil {
 		logger.Errorf("Error SelectNameById: %s", err)
 		return "", err
